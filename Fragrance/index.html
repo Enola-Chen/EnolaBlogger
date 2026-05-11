@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>香水探索</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;500;600;700&display=swap');
+    
+    :root {
+      --noir: #0D0D0D;
+      --noir-light: #1A1A1A;
+      --noir-soft: #2D2D2D;
+      --gold: #C9A962;
+      --gold-light: #D4B978;
+      --gold-pale: #E8D5A3;
+      --cream: #F8F6F1;
+      --cream-dark: #EBE6DC;
+      --champagne: #F5F0E6;
+      --text-dark: #1A1A1A;
+      --text-muted: #6B6B6B;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Serif TC', serif;
+      background: var(--noir);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--cream);
+    }
+
+    .fragrance-circle {
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: var(--gold);
+    }
+
+    .fragrance-circle:hover {
+      transform: scale(1.12);
+      border-color: var(--gold-light);
+      background: rgba(201, 169, 98, 0.08);
+      box-shadow: 0 0 30px rgba(201, 169, 98, 0.2);
+    }
+
+    .fragrance-circle.recommended {
+      animation: luxury-pulse 2.5s ease-in-out infinite;
+      border-color: var(--gold-light);
+      border-width: 2px;
+      box-shadow: 
+        0 0 20px rgba(201, 169, 98, 0.3),
+        inset 0 0 20px rgba(201, 169, 98, 0.05);
+    }
+
+    .fragrance-circle.selected {
+      background: var(--gold);
+      color: var(--noir);
+      border-color: var(--gold-light);
+      box-shadow: 
+        0 0 40px rgba(201, 169, 98, 0.5),
+        0 0 80px rgba(201, 169, 98, 0.2);
+    }
+
+    .fragrance-circle.on-shelf {
+      opacity: 0.2;
+      pointer-events: none;
+      border-style: dashed;
+    }
+
+    @keyframes luxury-pulse {
+      0%, 100% {
+        box-shadow: 
+          0 0 20px rgba(201, 169, 98, 0.3),
+          inset 0 0 20px rgba(201, 169, 98, 0.05);
+      }
+      50% {
+        box-shadow: 
+          0 0 40px rgba(201, 169, 98, 0.5),
+          0 0 80px rgba(201, 169, 98, 0.15),
+          inset 0 0 30px rgba(201, 169, 98, 0.1);
+      }
+    }
+
+    .center-area {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 520px;
+      height: 320px;
+      border-radius: 2px;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(201, 169, 98, 0.08);
+      padding: 24px 40px;
+      overflow: hidden;
+    }
+
+    .center-shelf {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+
+    .shelf-slot {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px dashed rgba(201, 169, 98, 0.4);
+      margin: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-family: 'Noto Serif TC', serif;
+      letter-spacing: 1px;
+      color: rgba(201, 169, 98, 0.5);
+      transition: all 0.4s ease;
+    }
+
+    .shelf-slot.filled {
+      background: var(--gold);
+      border-style: solid;
+      border-color: var(--gold-light);
+      color: var(--noir);
+      font-weight: 500;
+      box-shadow: 0 0 20px rgba(201, 169, 98, 0.3);
+    }
+
+    .game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: 
+        radial-gradient(ellipse at center, var(--noir-light) 0%, var(--noir) 70%);
+    }
+
+    
+    
+    .instruction-panel {
+      background: transparent;
+      padding: 16px 20px;
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+    }
+
+    .instruction-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.4rem;
+      color: var(--cream);
+      margin-bottom: 10px;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+
+    .instruction-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .word-selector {
+      background: transparent;
+      padding: 8px 12px;
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .word-btn {
+      padding: 10px 8px;
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      background: transparent;
+      color: var(--cream);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .word-btn:hover {
+      background: var(--gold);
+      color: var(--noir);
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(201, 169, 98, 0.2);
+    }
+
+    .base-note-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .base-note-card {
+      padding: 40px 20px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      background: rgba(26, 26, 26, 0.5);
+      cursor: pointer;
+      transition: all 0.5s ease;
+      text-align: center;
+    }
+
+    .base-note-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      background: rgba(201, 169, 98, 0.05);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(201, 169, 98, 0.1);
+    }
+
+    .base-note-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      filter: grayscale(30%);
+      transition: filter 0.4s ease;
+    }
+
+    .base-note-card:hover .base-note-emoji {
+      filter: grayscale(0%);
+    }
+
+    .base-note-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+      font-weight: 300;
+      letter-spacing: 3px;
+    }
+
+    .scenario-selector {
+      display: flex;
+      gap: 60px;
+      justify-content: center;
+    }
+
+    .scenario-card {
+      width: 220px;
+      padding: 60px 40px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      background: rgba(26, 26, 26, 0.5);
+      cursor: pointer;
+      transition: all 0.5s ease;
+      text-align: center;
+    }
+
+    .scenario-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--gold);
+      background: rgba(201, 169, 98, 0.05);
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(201, 169, 98, 0.1);
+    }
+
+    .scenario-icon {
+      font-size: 2.5rem;
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+
+    .scenario-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.2rem;
+      color: var(--cream);
+      font-weight: 300;
+      letter-spacing: 4px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity 0.8s ease;
+    }
+    .fade-enter-from, .fade-leave-to {
+      opacity: 0;
+    }
+
+    .slide-up-enter-active, .slide-up-leave-active {
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .slide-up-enter-from {
+      opacity: 0;
+      transform: translate(-50%, -45%);
+    }
+    .slide-up-leave-to {
+      opacity: 0;
+      transform: translate(-50%, -55%);
+    }
+
+    .confirm-btn {
+      margin-top: 16px;
+      padding: 14px 40px;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      text-transform: uppercase;
+    }
+
+    .confirm-btn:hover {
+      background: var(--gold);
+      color: var(--noir);
+      box-shadow: 0 0 30px rgba(201, 169, 98, 0.3);
+    }
+
+    .confirm-btn:disabled {
+      border-color: rgba(201, 169, 98, 0.2);
+      color: rgba(201, 169, 98, 0.3);
+      cursor: not-allowed;
+    }
+
+    .confirm-btn:disabled:hover {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Luxury Typography */
+    h1, h2, h3 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 300;
+      letter-spacing: 4px;
+    }
+
+    /* Step 5 Results - Luxury Style */
+    .result-container {
+      background: var(--noir);
+      min-height: 100vh;
+      padding: 80px 40px;
+    }
+
+    .winner-card {
+      background: linear-gradient(180deg, var(--noir-light) 0%, var(--noir) 100%);
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      padding: 60px;
+      max-width: 600px;
+      margin: 0 auto 60px;
+      position: relative;
+    }
+
+    .winner-card img {
+      border: 1px solid rgba(201, 169, 98, 0.3);
+    }
+
+    .other-picks-card {
+      background: var(--noir-light);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      padding: 30px;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .final-arc-badge {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 64px;
+      height: 64px;
+      border-top: none;
+      border-right: 1px solid var(--gold);
+      border-left: none;
+      border-bottom: 1px solid var(--gold);
+      border-bottom-right-radius: 64px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 10px;
+      padding-right: 24px;
+      color: var(--gold);
+      font-size: 13px;
+      letter-spacing: 1px;
+      background: transparent;
+      backdrop-filter: none;
+      z-index: 2;
+    }
+
+    .other-picks-card:hover {
+      border-color: rgba(201, 169, 98, 0.5);
+      transform: translateY(-5px);
+    }
+
+    /* Decorative Elements */
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 20px auto;
+      opacity: 0.6;
+    }
+
+    .subtitle {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Corner Dior Rose Decorations */
+    .corner-rose {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.35;
+    }
+
+    .corner-rose svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--gold);
+      stroke-width: 0.7;
+      fill: none;
+    }
+
+    .corner-tl { top: -40px; left: -40px; }
+    .corner-tr { top: -40px; right: -40px; transform: scaleX(-1); }
+    .corner-bl { bottom: -40px; left: -40px; transform: scaleY(-1); }
+    .corner-br { bottom: -40px; right: -40px; transform: scale(-1, -1); }
+
+    /* Back Button */
+    .back-btn {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(201, 169, 98, 0.5);
+      border-radius: 50%;
+      background: rgba(13, 13, 13, 0.8);
+      backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 50;
+    }
+
+    .back-btn:hover {
+      border-color: var(--gold);
+      background: rgba(201, 169, 98, 0.15);
+      transform: scale(1.1);
+    }
+
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold);
+      stroke-width: 2;
+      fill: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover svg {
+      stroke: var(--gold-light);
+      transform: translateX(-2px);
+    }
+
+    /* Base Fragrance Selector for Step 2 */
+    .base-frag-selector {
+      display: flex;
+      gap: 50px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .base-frag-card {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .base-frag-card:hover {
+      transform: scale(1.1);
+      border-color: var(--gold);
+      background: rgba(201, 169, 98, 0.08);
+      box-shadow: 0 0 40px rgba(201, 169, 98, 0.2);
+    }
+
+    .base-frag-card.selected {
+      background: var(--gold);
+      color: var(--noir);
+      box-shadow: 0 0 50px rgba(201, 169, 98, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <!-- Corner Dior Rose Decorations -->
+  <div class="corner-rose corner-tl">
+    <svg viewBox="0 0 280 280">
+      <!-- Main Dior Rose -->
+      <circle cx="65" cy="65" r="32" />
+      <circle cx="65" cy="65" r="22" />
+      <circle cx="65" cy="65" r="10" />
+      <circle cx="65" cy="65" r="4" />
+      <!-- Outer Petals -->
+      <path d="M33,65 Q48,33 65,33 Q82,33 97,65 Q82,50 65,50 Q48,50 33,65" />
+      <path d="M65,33 Q97,48 97,65 Q97,82 65,97 Q80,82 80,65 Q80,48 65,33" />
+      <path d="M97,65 Q82,97 65,97 Q48,97 33,65 Q48,80 65,80 Q82,80 97,65" />
+      <path d="M65,97 Q33,82 33,65 Q33,48 65,33 Q50,48 50,65 Q50,82 65,97" />
+      <!-- Inner Petals -->
+      <path d="M50,65 Q57,50 65,50 Q73,50 80,65 Q73,58 65,58 Q57,58 50,65" />
+      <path d="M65,50 Q80,57 80,65 Q80,73 65,80 Q72,73 72,65 Q72,57 65,50" />
+      <!-- Center spiral -->
+      <path d="M60,65 Q65,60 70,65 Q65,70 60,65" />
+      <!-- Flowing vine along TOP -->
+      <path d="M97,55 C125,48 145,58 175,45 S210,55 245,42 S275,52 300,40" />
+      <!-- Tendrils -->
+      <path d="M140,52 C148,42 152,46 150,36" />
+      <path d="M200,48 C210,38 215,42 218,32" />
+      <!-- Leaves -->
+      <path d="M160,50 C175,36 188,42 192,52 C178,55 162,52 160,50" />
+      <path d="M230,44 C248,30 262,38 265,48 C250,52 234,48 230,44" />
+      <!-- Buds -->
+      <circle cx="175" cy="44" r="4" />
+      <circle cx="255" cy="40" r="3" />
+      <!-- Flowing vine along LEFT -->
+      <path d="M55,97 C48,125 58,145 45,175 S55,210 42,245 S52,275 40,300" />
+      <!-- Tendrils -->
+      <path d="M52,140 C42,148 46,152 36,150" />
+      <path d="M48,200 C38,210 42,215 32,218" />
+      <!-- Leaves -->
+      <path d="M50,160 C36,175 42,188 52,192 C55,178 52,162 50,160" />
+      <path d="M44,230 C30,248 38,262 48,265 C52,250 48,234 44,230" />
+      <!-- Buds -->
+      <circle cx="44" cy="175" r="4" />
+      <circle cx="40" cy="255" r="3" />
+    </svg>
+  </div>
+  <div class="corner-rose corner-tr">
+    <svg viewBox="0 0 280 280">
+      <circle cx="65" cy="65" r="32" />
+      <circle cx="65" cy="65" r="22" />
+      <circle cx="65" cy="65" r="10" />
+      <circle cx="65" cy="65" r="4" />
+      <path d="M33,65 Q48,33 65,33 Q82,33 97,65 Q82,50 65,50 Q48,50 33,65" />
+      <path d="M65,33 Q97,48 97,65 Q97,82 65,97 Q80,82 80,65 Q80,48 65,33" />
+      <path d="M97,65 Q82,97 65,97 Q48,97 33,65 Q48,80 65,80 Q82,80 97,65" />
+      <path d="M65,97 Q33,82 33,65 Q33,48 65,33 Q50,48 50,65 Q50,82 65,97" />
+      <path d="M50,65 Q57,50 65,50 Q73,50 80,65 Q73,58 65,58 Q57,58 50,65" />
+      <path d="M65,50 Q80,57 80,65 Q80,73 65,80 Q72,73 72,65 Q72,57 65,50" />
+      <path d="M60,65 Q65,60 70,65 Q65,70 60,65" />
+      <path d="M97,55 C125,48 145,58 175,45 S210,55 245,42 S275,52 300,40" />
+      <path d="M140,52 C148,42 152,46 150,36" />
+      <path d="M200,48 C210,38 215,42 218,32" />
+      <path d="M160,50 C175,36 188,42 192,52 C178,55 162,52 160,50" />
+      <path d="M230,44 C248,30 262,38 265,48 C250,52 234,48 230,44" />
+      <circle cx="175" cy="44" r="4" />
+      <circle cx="255" cy="40" r="3" />
+      <path d="M55,97 C48,125 58,145 45,175 S55,210 42,245 S52,275 40,300" />
+      <path d="M52,140 C42,148 46,152 36,150" />
+      <path d="M48,200 C38,210 42,215 32,218" />
+      <path d="M50,160 C36,175 42,188 52,192 C55,178 52,162 50,160" />
+      <path d="M44,230 C30,248 38,262 48,265 C52,250 48,234 44,230" />
+      <circle cx="44" cy="175" r="4" />
+      <circle cx="40" cy="255" r="3" />
+    </svg>
+  </div>
+  <div class="corner-rose corner-bl">
+    <svg viewBox="0 0 280 280">
+      <circle cx="65" cy="65" r="32" />
+      <circle cx="65" cy="65" r="22" />
+      <circle cx="65" cy="65" r="10" />
+      <circle cx="65" cy="65" r="4" />
+      <path d="M33,65 Q48,33 65,33 Q82,33 97,65 Q82,50 65,50 Q48,50 33,65" />
+      <path d="M65,33 Q97,48 97,65 Q97,82 65,97 Q80,82 80,65 Q80,48 65,33" />
+      <path d="M97,65 Q82,97 65,97 Q48,97 33,65 Q48,80 65,80 Q82,80 97,65" />
+      <path d="M65,97 Q33,82 33,65 Q33,48 65,33 Q50,48 50,65 Q50,82 65,97" />
+      <path d="M50,65 Q57,50 65,50 Q73,50 80,65 Q73,58 65,58 Q57,58 50,65" />
+      <path d="M65,50 Q80,57 80,65 Q80,73 65,80 Q72,73 72,65 Q72,57 65,50" />
+      <path d="M60,65 Q65,60 70,65 Q65,70 60,65" />
+      <path d="M97,55 C125,48 145,58 175,45 S210,55 245,42 S275,52 300,40" />
+      <path d="M140,52 C148,42 152,46 150,36" />
+      <path d="M200,48 C210,38 215,42 218,32" />
+      <path d="M160,50 C175,36 188,42 192,52 C178,55 162,52 160,50" />
+      <path d="M230,44 C248,30 262,38 265,48 C250,52 234,48 230,44" />
+      <circle cx="175" cy="44" r="4" />
+      <circle cx="255" cy="40" r="3" />
+      <path d="M55,97 C48,125 58,145 45,175 S55,210 42,245 S52,275 40,300" />
+      <path d="M52,140 C42,148 46,152 36,150" />
+      <path d="M48,200 C38,210 42,215 32,218" />
+      <path d="M50,160 C36,175 42,188 52,192 C55,178 52,162 50,160" />
+      <path d="M44,230 C30,248 38,262 48,265 C52,250 48,234 44,230" />
+      <circle cx="44" cy="175" r="4" />
+      <circle cx="40" cy="255" r="3" />
+    </svg>
+  </div>
+  <div class="corner-rose corner-br">
+    <svg viewBox="0 0 280 280">
+      <circle cx="65" cy="65" r="32" />
+      <circle cx="65" cy="65" r="22" />
+      <circle cx="65" cy="65" r="10" />
+      <circle cx="65" cy="65" r="4" />
+      <path d="M33,65 Q48,33 65,33 Q82,33 97,65 Q82,50 65,50 Q48,50 33,65" />
+      <path d="M65,33 Q97,48 97,65 Q97,82 65,97 Q80,82 80,65 Q80,48 65,33" />
+      <path d="M97,65 Q82,97 65,97 Q48,97 33,65 Q48,80 65,80 Q82,80 97,65" />
+      <path d="M65,97 Q33,82 33,65 Q33,48 65,33 Q50,48 50,65 Q50,82 65,97" />
+      <path d="M50,65 Q57,50 65,50 Q73,50 80,65 Q73,58 65,58 Q57,58 50,65" />
+      <path d="M65,50 Q80,57 80,65 Q80,73 65,80 Q72,73 72,65 Q72,57 65,50" />
+      <path d="M60,65 Q65,60 70,65 Q65,70 60,65" />
+      <path d="M97,55 C125,48 145,58 175,45 S210,55 245,42 S275,52 300,40" />
+      <path d="M140,52 C148,42 152,46 150,36" />
+      <path d="M200,48 C210,38 215,42 218,32" />
+      <path d="M160,50 C175,36 188,42 192,52 C178,55 162,52 160,50" />
+      <path d="M230,44 C248,30 262,38 265,48 C250,52 234,48 230,44" />
+      <circle cx="175" cy="44" r="4" />
+      <circle cx="255" cy="40" r="3" />
+      <path d="M55,97 C48,125 58,145 45,175 S55,210 42,245 S52,275 40,300" />
+      <path d="M52,140 C42,148 46,152 36,150" />
+      <path d="M48,200 C38,210 42,215 32,218" />
+      <path d="M50,160 C36,175 42,188 52,192 C55,178 52,162 50,160" />
+      <path d="M44,230 C30,248 38,262 48,265 C52,250 48,234 44,230" />
+      <circle cx="44" cy="175" r="4" />
+      <circle cx="40" cy="255" r="3" />
+    </svg>
+  </div>
+
+  <div id="app">
+    <!-- Step 1: Scenario Selection -->
+    <transition name="fade">
+      <div v-if="currentStep === 1" class="game-container flex items-center justify-center">
+        <div class="text-center">
+          <p class="subtitle mb-6">香水之旅</p>
+          <h1 class="text-4xl mb-4" style="color: var(--cream);">探索你的命定香水</h1>
+          <div class="divider"></div>
+          <p class="text-lg mb-16" style="color: var(--text-muted); font-weight: 300; letter-spacing: 1px;">選擇你的旅程</p>
+          <div class="scenario-selector">
+            <div class="scenario-card" @click="selectScenario('self')">
+              <div class="scenario-icon">✦</div>
+              <div class="scenario-title">為自己</div>
+            </div>
+            <div class="scenario-card" @click="selectScenario('friend')">
+              <div class="scenario-icon">❖</div>
+              <div class="scenario-title">贈予摯友</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Step 2: Base Note Selection (via representative fragrances) -->
+    <transition name="fade">
+      <div v-if="currentStep === 2" class="game-container flex items-center justify-center">
+        <!-- Back Button -->
+        <div class="back-btn" style="position: fixed; top: 100px; left: 80px;" @click="goBack" title="返回">
+          <svg viewBox="0 0 14 14">
+            <path d="M9,3 L5,7 L9,11" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="text-center" style="max-width: 900px;">
+          <p class="subtitle mb-6">{{ scenario === 'friend' ? '探索對朋友的印象' : '探索你的本質' }}</p>
+          <h2 class="text-3xl mb-4" style="color: var(--cream);">
+            {{ scenario === 'friend' ? '在你的印象中他是什麼樣子？' : '感受四種氣息' }}
+          </h2>
+          <div class="divider"></div>
+          <p class="text-base mb-14" style="color: var(--text-muted); font-weight: 300; letter-spacing: 1px;">
+            {{ scenario === 'friend' ? '請從這四款香水中，選出最符合他給你的感覺' : '請聞這四款香水，選出最吸引你的一款' }}
+          </p>
+          <div class="base-frag-selector">
+            <div 
+              v-for="rep in representativeFragrances" 
+              :key="rep.id"
+              class="base-frag-card"
+              :class="{ 'selected': selectedRepFragrance === rep.id }"
+              @click="selectRepFragrance(rep.id)"
+            >
+              #{{ rep.id }}
+            </div>
+          </div>
+          <button 
+            v-if="selectedRepFragrance"
+            class="confirm-btn mt-14"
+            @click="confirmRepFragrance"
+          >
+            確認選擇
+          </button>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Step 3: Main Game (Circle Layout + Word Selection) -->
+    <transition name="fade">
+      <div v-if="currentStep === 3" class="game-container">
+        <!-- SVG for light beams -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 20;">
+          <g v-for="beam in activeBeams" :key="beam.id">
+            <line 
+              :x1="beam.x1" 
+              :y1="beam.y1" 
+              :x2="beam.x2" 
+              :y2="beam.y2"
+              stroke="#C9A962"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+          </g>
+        </svg>
+
+        <!-- Fragrance circles -->
+        <div 
+          v-for="(frag, index) in fragrances" 
+          :key="frag.id"
+          class="fragrance-circle"
+          :class="{ 
+            'recommended': isRecommended(frag.id),
+            'selected': selectedInRound === frag.id,
+            'on-shelf': isOnShelf(frag.id)
+          }"
+          :style="getCirclePosition(index)"
+          @click="selectFragrance(frag.id)"
+        >
+          #{{ frag.id }}
+        </div>
+
+        <!-- Back Button -->
+        <div class="back-btn" style="position: fixed; top: 100px; left: 80px;" @click="goBack" title="返回">
+          <svg viewBox="0 0 14 14">
+            <path d="M9,3 L5,7 L9,11" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- Center Area: Contains Shelf + Instructions/Word Selector -->
+        <div class="center-area">
+          <!-- Center Shelf -->
+          <div class="center-shelf">
+            <div class="flex flex-wrap justify-center">
+              <div 
+                v-for="(slot, index) in 3" 
+                :key="index"
+                class="shelf-slot"
+                :class="{ 'filled': shelf[index] }"
+              >
+                {{ shelf[index] ? '#' + shelf[index] : '' }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Instruction Panel (shown when not selecting words) -->
+          <div v-if="!showWordSelector" class="instruction-panel">
+            <div class="instruction-title" style="font-size: 1.1rem;">
+              {{ getInstructionTitle() }}
+            </div>
+            <div class="instruction-text" style="font-size: 0.85rem;">
+              {{ getInstructionText() }}
+            </div>
+            <button 
+              v-if="selectedInRound && gamePhase === 'selecting'"
+              class="confirm-btn"
+              style="padding: 12px 36px; font-size: 0.85rem;"
+              @click="confirmSelection"
+            >
+              確認選擇 #{{ selectedInRound }}
+            </button>
+          </div>
+
+          <!-- Word Selector (replaces instruction panel) -->
+          <div v-if="showWordSelector" class="word-selector">
+            <h3 class="text-lg text-center" style="color: var(--cream); font-family: 'Noto Serif TC', serif; font-weight: 300; letter-spacing: 1px;">
+              {{ scenario === 'friend' ? '他在你眼中的是什麼樣' : '你還想感受什麼' }}
+            </h3>
+            <div class="word-grid">
+              <button 
+                v-for="word in currentWordPool" 
+                :key="word.id"
+                class="word-btn"
+                @click="selectWord(word)"
+              >
+                {{ word.text }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Step 4: Final Selection -->
+    <transition name="fade">
+      <div v-if="currentStep === 4" class="game-container flex items-center justify-center">
+        <!-- Back Button -->
+        <div class="back-btn" style="position: fixed; top: 100px; left: 80px;" @click="goBack" title="返回">
+          <svg viewBox="0 0 14 14">
+            <path d="M9,3 L5,7 L9,11" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="text-center" style="max-width: 700px;">
+          <p class="subtitle mb-6">最終抉擇</p>
+          <h2 class="text-3xl mb-4" style="color: var(--cream);">命定時刻</h2>
+          <div class="divider"></div>
+          <p class="text-base mb-12" style="color: var(--text-muted); font-weight: 300; letter-spacing: 1px;">
+            請再次感受這三款香水，選出最觸動你的那一款
+          </p>
+          <div class="flex justify-center gap-12">
+            <div 
+              v-for="id in shelf" 
+              :key="id"
+              class="fragrance-circle"
+              :class="{ 'selected': finalChoice === id }"
+              style="position: relative; width: 90px; height: 90px; font-size: 16px; letter-spacing: 2px;"
+              @click="finalChoice = id"
+            >
+              #{{ id }}
+            </div>
+          </div>
+          <button 
+            class="confirm-btn mt-14"
+            :disabled="!finalChoice"
+            @click="revealResults"
+          >
+            確定
+          </button>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Step 5: Results Reveal -->
+    <transition name="fade">
+      <div v-if="currentStep === 5" class="game-container result-container" style="overflow-y: auto;">
+        <!-- Back Button -->
+        <div class="back-btn" style="position: fixed; top: 100px; left: 80px;" @click="goBack" title="返回">
+          <svg viewBox="0 0 14 14">
+            <path d="M9,3 L5,7 L9,11" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="text-center max-w-4xl mx-auto">
+          <p class="subtitle mb-6">最終選擇</p>
+          <h2 class="text-4xl mb-4" style="color: var(--cream);">命定香水</h2>
+          <div class="divider mb-12"></div>
+          
+          <!-- Winner -->
+          <div v-if="winnerFragrance" class="winner-card mb-16">
+            <div class="final-arc-badge">#{{ winnerFragrance.id }}</div>
+            <p class="subtitle mb-8" style="color: var(--gold);">✦ 命定之選 ✦</p>
+            <img 
+              :src="winnerFragrance.image" 
+              :alt="winnerFragrance.name"
+              class="w-72 h-auto object-contain mx-auto mb-8"
+            >
+            <h3 class="text-3xl mb-3" style="color: var(--cream); font-family: 'Noto Serif TC', serif; font-weight: 400; letter-spacing: 3px;">
+              {{ winnerFragrance.name }}
+            </h3>
+            <p class="text-lg mb-6" style="color: var(--gold); letter-spacing: 4px; font-weight: 300;">
+              {{ winnerFragrance.brand }}
+            </p>
+            <p class="mb-8" style="color: var(--text-muted); font-weight: 300; line-height: 1.8; max-width: 400px; margin-left: auto; margin-right: auto;">
+              {{ winnerFragrance.description }}
+            </p>
+            <p class="text-2xl" style="color: var(--cream); font-family: 'Noto Serif TC', serif; letter-spacing: 2px;">
+              {{ winnerFragrance.price.toLocaleString() }} 元
+            </p>
+          </div>
+
+          <!-- Other picks -->
+          <p class="subtitle mb-8">其他精選</p>
+          <div class="grid grid-cols-2 gap-8 max-w-2xl mx-auto mb-16">
+            <div 
+              v-for="frag in otherPicks"
+              :key="frag.id"
+              class="other-picks-card"
+            >
+              <div class="final-arc-badge">#{{ frag.id }}</div>
+              <img 
+                :src="frag.image" 
+                :alt="frag.name"
+                class="w-36 h-auto object-contain mx-auto mb-5"
+                style="border: 1px solid rgba(201, 169, 98, 0.2);"
+              >
+              <h5 class="text-lg mb-2" style="color: var(--cream); font-family: 'Noto Serif TC', serif; letter-spacing: 2px;">{{ frag.name }}</h5>
+              <p class="text-sm mb-3" style="color: var(--gold); letter-spacing: 2px;">{{ frag.brand }}</p>
+              <p class="text-sm" style="color: var(--text-muted);">{{ frag.price.toLocaleString() }} 元</p>
+            </div>
+          </div>
+
+          <button 
+            class="confirm-btn"
+            @click="restartGame"
+          >
+            重新開始
+          </button>
+        </div>
+      </div>
+    </transition>
+  </div>
+
+  <script type="module">
+    // Fragrance Data
+    const fragrances = [
+      // 木質調 #1-6
+      { id: 1, name: "Polo", brand: "Ralph Lauren", baseNote: "woody", price: 3200, description: "經典木質香，含松木、皮革等木質基調，展現紳士風範", image: "images/01-polo.jpg", tags: ["經典", "皮革", "紳士", "沉穩", "厚實"] },
+      { id: 2, name: "Santal 33", brand: "Le Labo", baseNote: "woody", price: 8900, description: "標誌性檀香木香水，帶有皮革與辛香的獨特氣息", image: "images/02-santal33.jpg", tags: ["檀香", "乾燥", "煙燻", "高級", "現代"] },
+      { id: 3, name: "Tam Dao", brand: "Diptyque", baseNote: "woody", price: 5800, description: "純淨檀香木香水，帶來寧靜與冥想般的體驗", image: "images/03-tamdao.jpg", tags: ["檀香", "靜謐", "安定", "純淨", "冥想"] },
+      { id: 4, name: "By the Fireplace", brand: "Maison Margiela", baseNote: "woody", price: 4500, description: "溫暖的壁爐香水，帶有煙燻木材與栗子的甜暖氣息", image: "images/04-fireplace.jpg", tags: ["煙火", "溫暖", "包覆", "甜暖", "冬日"] },
+      { id: 5, name: "Oud Wood", brand: "Tom Ford", baseNote: "woody", price: 12000, description: "珍貴沉香木香水，散發東方神秘與奢華氣質", image: "images/05-oudwood.jpg", tags: ["高級", "深沉", "奢華", "神秘", "東方"] },
+      { id: 6, name: "Wood Sage & Sea Salt", brand: "Jo Malone", baseNote: "woody", price: 4800, description: "海風與鼠尾草的清新組合，帶來海岸漫步的自然感受", image: "images/06-woodsage.jpg", tags: ["清爽", "自然", "海洋", "輕盈", "清新"] },
+      // 花香調 #7-14
+      { id: 7, name: "L'Interdit", brand: "Givenchy", baseNote: "floral", price: 4200, description: "禁忌之花，玫瑰與茉莉交織的大膽優雅香水", image: "images/07-linterdit.jpg", tags: ["優雅", "女性", "大膽", "玫瑰", "禁忌"] },
+      { id: 8, name: "Rive Gauche", brand: "Yves Saint Laurent", baseNote: "floral", price: 3800, description: "左岸風情，花香與木質基底的自信現代香水", image: "images/08-rivegauche.jpg", tags: ["自信", "冷冽", "現代", "知性", "都會"] },
+      { id: 9, name: "J'adore", brand: "Dior", baseNote: "floral", price: 5200, description: "經典花香女王，茉莉與玫瑰的奢華綻放", image: "images/09-jadore.jpg", tags: ["奢華", "女性", "經典", "高雅", "綻放"] },
+      { id: 10, name: "Chanel No.5", brand: "Chanel", baseNote: "floral", price: 6500, description: "永恆經典，定義了一個世紀的優雅花香", image: "images/10-chanel5.jpg", tags: ["經典", "高雅", "永恆", "優雅", "傳奇"] },
+      { id: 11, name: "Bloom", brand: "Gucci", baseNote: "floral", price: 4800, description: "花園盛開，茉莉與晚香玉的濃郁花束", image: "images/11-bloom.jpg", tags: ["盛開", "濃郁", "花園", "浪漫", "女性"] },
+      { id: 12, name: "Daisy", brand: "Marc Jacobs", baseNote: "floral", price: 3500, description: "清新雛菊，青春活力的甜美花香", image: "images/12-daisy.jpg", tags: ["清新", "青春", "甜美", "活潑", "輕盈"] },
+      { id: 13, name: "Blanche", brand: "Byredo", baseNote: "floral", price: 7200, description: "純白花香，潔淨如初洗床單的清新氣息", image: "images/13-blanche.jpg", tags: ["純白", "乾淨", "純淨", "柔軟", "極簡"] },
+      { id: 14, name: "Fleur de Peony", brand: "Aerin", baseNote: "floral", price: 4500, description: "嬌嫩牡丹，粉嫩柔美的春日花香", image: "images/14-peony.jpg", tags: ["粉嫩", "清雅", "柔美", "春日", "嬌嫩"] },
+      // 果香調 #15-22
+      { id: 15, name: "Mitsouko", brand: "Guerlain", baseNote: "fruity", price: 5500, description: "經典蜜桃香水，果香與木質的完美層次", image: "images/15-mitsouko.jpg", tags: ["溫潤", "層次", "經典", "成熟", "蜜桃"] },
+      { id: 16, name: "Nude", brand: "Rihanna", baseNote: "fruity", price: 2800, description: "水果花香與香草的肌膚之親", image: "images/16-nude.jpg", tags: ["肌膚", "甜潤", "柔軟", "親密", "溫暖"] },
+      { id: 17, name: "L'Imperatrice", brand: "Dolce & Gabbana", baseNote: "fruity", price: 3200, description: "西瓜與奇異果的明亮果香，充滿夏日活力", image: "images/17-imperatrice.jpg", tags: ["明亮", "夏日", "活力", "清爽", "水果"] },
+      { id: 18, name: "Eden Juicy Apple", brand: "Kayali", baseNote: "fruity", price: 3800, description: "多汁青蘋果的酸甜誘惑", image: "images/18-edenapple.jpg", tags: ["酸甜", "多汁", "青蘋果", "清新", "俏皮"] },
+      { id: 19, name: "Perfect", brand: "Marc Jacobs", baseNote: "fruity", price: 3500, description: "水仙與杏仁的現代俏皮香水", image: "images/19-perfect.jpg", tags: ["俏皮", "現代", "自信", "活潑", "年輕"] },
+      { id: 20, name: "Cherry in the Air", brand: "Escada", baseNote: "fruity", price: 2500, description: "甜美櫻桃的浪漫春日氣息", image: "images/20-cherry.jpg", tags: ["櫻桃", "甜美", "浪漫", "春日", "少女"] },
+      { id: 21, name: "Un Jardin Sur Le Nil", brand: "Hermès", baseNote: "fruity", price: 4200, description: "尼羅河畔的青綠芒果與蓮花", image: "images/21-jardinnil.jpg", tags: ["青綠", "自然", "清新", "水感", "異國"] },
+      { id: 22, name: "Bright Crystal", brand: "Versace", baseNote: "fruity", price: 3000, description: "石榴與牡丹的晶瑩透亮香水", image: "images/22-brightcrystal.jpg", tags: ["水感", "透明", "晶瑩", "清爽", "優雅"] },
+      // 動物調 #23-30
+      { id: 23, name: "Another 13", brand: "Le Labo", baseNote: "animalic", price: 8500, description: "模糊邊界的現代麝香，似有若無的第二層肌膚", image: "images/23-another13.jpg", tags: ["模糊", "極簡", "冷感", "乾淨", "現代"] },
+      { id: 24, name: "Not A Perfume", brand: "Juliette Has A Gun", baseNote: "animalic", price: 4200, description: "單一分子的透明麝香，極簡純粹", image: "images/24-notaperfume.jpg", tags: ["透明", "極簡", "純粹", "乾淨", "輕盈"] },
+      { id: 25, name: "Baccarat Rouge 540", brand: "Maison Francis Kurkdjian", baseNote: "animalic", price: 15000, description: "琥珀與藏紅花的奢華擴散，甜暖而深邃", image: "images/25-br540.jpg", tags: ["擴散", "甜暖", "奢華", "琥珀", "高級"] },
+      { id: 26, name: "Tuscan Leather", brand: "Tom Ford", baseNote: "animalic", price: 12500, description: "濃烈皮革與覆盆子的野性魅力", image: "images/26-tuscanleather.jpg", tags: ["皮革", "野性", "濃烈", "大膽", "性感"] },
+      { id: 27, name: "For Her", brand: "Narciso Rodriguez", baseNote: "animalic", price: 4500, description: "貼近肌膚的溫柔麝香，女性化而親密", image: "images/27-forher.jpg", tags: ["肌膚", "女性", "溫柔", "親密", "麝香"] },
+      { id: 28, name: "Black Saffron", brand: "Byredo", baseNote: "animalic", price: 7500, description: "黑色番紅花與皮革的神秘辛香", image: "images/28-blacksaffron.jpg", tags: ["辛香", "神秘", "深沉", "皮革", "異國"] },
+      { id: 29, name: "Side Effect", brand: "Initio", baseNote: "animalic", price: 9800, description: "蘭姆酒與香草的醉人夜晚", image: "images/29-sideeffect.jpg", tags: ["酒感", "性感", "夜晚", "甜暖", "魅惑"] },
+      { id: 30, name: "Muscs Koublaï Khan", brand: "Serge Lutens", baseNote: "animalic", price: 6800, description: "原始野性的動物麝香，大膽前衛", image: "images/30-muscs.jpg", tags: ["原始", "野性", "大膽", "動物", "前衛"] }
+    ];
+
+    const baseNotes = {
+      woody: { name: "木質調", emoji: "🌲", color: "#8B4513" },
+      floral: { name: "花香調", emoji: "🌸", color: "#FFB6C1" },
+      fruity: { name: "果香調", emoji: "🍊", color: "#FFA500" },
+      animalic: { name: "動物調", emoji: "🔥", color: "#8B0000" }
+    };
+
+    // Word pools
+    const round1Words = [
+      { id: 'elegant', text: '優雅', targetNote: 'floral' },
+      { id: 'romantic', text: '浪漫', targetNote: 'floral' },
+      { id: 'fresh', text: '清爽', targetNote: 'fruity' },
+      { id: 'sweet', text: '甜美', targetNote: 'fruity' },
+      { id: 'smoky', text: '煙燻', targetNote: 'woody' },
+      { id: 'warm', text: '溫暖', targetNote: 'woody' },
+      { id: 'mysterious', text: '神秘', targetNote: 'animalic' },
+      { id: 'pure', text: '純淨', targetNote: 'animalic' },
+      { id: 'mature', text: '成熟', targetNote: 'cross' },
+      { id: 'light', text: '輕盈', targetNote: 'cross' },
+      { id: 'soft', text: '柔美', targetNote: 'cross' },
+      { id: 'natural', text: '自然', targetNote: 'cross' }
+    ];
+
+    const round2Pools = {
+      floral_deep: [
+        { id: 'noble', text: '高雅' }, { id: 'powdery', text: '粉感' },
+        { id: 'feminine', text: '女性' }, { id: 'sweetClean', text: '清甜' },
+        { id: 'bloom', text: '盛開' }, { id: 'mellow', text: '溫潤' },
+        { id: 'layered', text: '層次' }, { id: 'clean', text: '乾淨' },
+        { id: 'charming', text: '柔媚' }, { id: 'fireLight', text: '煙火' },
+        { id: 'reserved', text: '內斂' }, { id: 'lively', text: '活潑' }
+      ],
+      woody_deep: [
+        { id: 'sandalwood', text: '檀香' }, { id: 'serene', text: '靜謐' },
+        { id: 'steady', text: '沉穩' }, { id: 'embracing', text: '包覆' },
+        { id: 'thick', text: '厚實' }, { id: 'deep', text: '深沉' },
+        { id: 'leather', text: '皮革' }, { id: 'layered2', text: '層次' },
+        { id: 'vintage', text: '復古' }, { id: 'refreshing', text: '清新' },
+        { id: 'sweetFeel', text: '甜感' }, { id: 'airy', text: '飄逸' }
+      ],
+      fruity_deep: [
+        { id: 'fruity', text: '水果' }, { id: 'juicy', text: '多汁' },
+        { id: 'youthful', text: '青春' }, { id: 'bright', text: '明亮' },
+        { id: 'playful', text: '俏皮' }, { id: 'elegantLight', text: '清雅' },
+        { id: 'freshNew', text: '清新' }, { id: 'mellowWarm', text: '溫潤' },
+        { id: 'transparent', text: '透明' }, { id: 'groundedContrast', text: '沉靜' },
+        { id: 'intense', text: '濃烈' }, { id: 'ripeContrast', text: '熟成' }
+      ],
+      animalic_deep: [
+        { id: 'blurry', text: '模糊' }, { id: 'minimal', text: '極簡' },
+        { id: 'cool', text: '冷感' }, { id: 'alluring', text: '魅惑' },
+        { id: 'sweetWarm', text: '甜暖' }, { id: 'deepDark', text: '深沉' },
+        { id: 'exotic', text: '異國' }, { id: 'sexy', text: '性感' },
+        { id: 'luxurious', text: '高級' }, { id: 'freshContrast', text: '清透' },
+        { id: 'romanticContrast', text: '柔情' }, { id: 'livelyContrast', text: '活潑' }
+      ]
+    };
+
+    const round3Pools = {
+      floral_confirm: [
+        { id: 'pureWhite', text: '純白' }, { id: 'nobleElegant', text: '貴氣' },
+        { id: 'softGentle', text: '柔軟' }, { id: 'luxuryGrand', text: '奢華' },
+        { id: 'elegantLight2', text: '素雅' }, { id: 'womanly', text: '嫵媚' },
+        { id: 'pinkTender', text: '粉嫩' }, { id: 'classic', text: '經典' },
+        { id: 'coldCrisp', text: '冷冽' }, { id: 'confident', text: '自信' },
+        { id: 'cleanPure', text: '純粹' }, { id: 'mellowRich', text: '醇厚' }
+      ],
+      woody_confirm: [
+        { id: 'sandalwoodPure', text: '木香' }, { id: 'serenePeace', text: '寧靜' },
+        { id: 'fireSide', text: '篝火' }, { id: 'thickSolid', text: '紮實' },
+        { id: 'highEnd', text: '頂級' }, { id: 'dryWood', text: '乾燥' },
+        { id: 'leatherRich', text: '質感' }, { id: 'deepProfound', text: '幽深' },
+        { id: 'embraceWrap', text: '環繞' }, { id: 'stableCalm', text: '安定' },
+        { id: 'steadyFirm', text: '穩重' }, { id: 'reserved', text: '低調' }
+      ],
+      fruity_confirm: [
+        { id: 'mellowSmooth', text: '圓潤' }, { id: 'skinClose', text: '肌膚' },
+        { id: 'sourSweet', text: '酸甜' }, { id: 'cherryRed', text: '櫻桃' },
+        { id: 'playfulFun', text: '調皮' }, { id: 'watery', text: '水感' },
+        { id: 'greenFresh', text: '青綠' }, { id: 'sweetMoist', text: '甜潤' },
+        { id: 'brightShine', text: '閃耀' }, { id: 'layeredRich', text: '豐富' },
+        { id: 'juicyFull', text: '飽滿' }, { id: 'modernNew', text: '現代' }
+      ],
+      animalic_confirm: [
+        { id: 'blurryVague', text: '朦朧' }, { id: 'transparentClear', text: '無形' },
+        { id: 'diffusive', text: '擴散' }, { id: 'leatherRaw', text: '粗獷' },
+        { id: 'skinIntimate', text: '親膚' }, { id: 'spicy', text: '辛香' },
+        { id: 'boozy', text: '酒感' }, { id: 'primal', text: '原始' },
+        { id: 'sweetWarmth', text: '暖甜' }, { id: 'coolCold', text: '冷冽' },
+        { id: 'wild', text: '野性' }, { id: 'sexyHot', text: '撩人' }
+      ]
+    };
+
+    const { createApp, ref, computed, onMounted, nextTick } = Vue;
+
+    createApp({
+      setup() {
+        const currentStep = ref(1);
+        const totalSteps = ref(5);
+        const scenario = ref(null);
+        const selectedBaseNote = ref(null);
+        const shelf = ref([null, null, null]);
+        const selectedInRound = ref(null);
+        const recommendedIds = ref([]);
+        const activeBeams = ref([]);
+        const showWordSelector = ref(false);
+        const currentWordPool = ref([]);
+        const selectedWords = ref([]);
+        const gamePhase = ref('waiting'); // waiting, recommending, selecting
+        const finalChoice = ref(null);
+        const currentRound = ref(0);
+        const usedWords = ref([]);
+        const selectedRepFragrance = ref(null);
+
+        // Representative fragrances (one for each base note)
+        const representativeFragrances = ref([
+          { id: 3, baseNote: 'woody' },    // Tam Dao
+          { id: 10, baseNote: 'floral' },  // Chanel No.5
+          { id: 17, baseNote: 'fruity' },  // L'Imperatrice
+          { id: 25, baseNote: 'animalic' } // Baccarat Rouge 540
+        ]);
+
+        const winnerFragrance = computed(() => {
+          if (!finalChoice.value) return null;
+          return fragrances.find(f => f.id === finalChoice.value);
+        });
+
+        const otherPicks = computed(() => {
+          return shelf.value
+            .filter(id => id && id !== finalChoice.value)
+            .map(id => fragrances.find(f => f.id === id));
+        });
+
+        function goBack() {
+          if (currentStep.value > 1) {
+            if (currentStep.value === 2) {
+              scenario.value = null;
+              selectedRepFragrance.value = null;
+            } else if (currentStep.value === 3) {
+              selectedBaseNote.value = null;
+              selectedRepFragrance.value = null;
+              showWordSelector.value = false;
+              recommendedIds.value = [];
+              activeBeams.value = [];
+              selectedWords.value = [];
+              usedWords.value = [];
+              currentRound.value = 0;
+              gamePhase.value = 'waiting';
+            } else if (currentStep.value === 4) {
+              const lastFilledIndex = shelf.value.findLastIndex(s => s !== null);
+              if (lastFilledIndex !== -1) {
+                shelf.value[lastFilledIndex] = null;
+              }
+              showWordSelector.value = true;
+              currentRound.value = shelf.value.filter(s => s !== null).length + 1;
+            } else if (currentStep.value === 5) {
+              finalChoice.value = null;
+            }
+            currentStep.value--;
+          }
+        }
+
+        function selectScenario(type) {
+          scenario.value = type;
+          currentStep.value = 2;
+        }
+
+        function selectRepFragrance(id) {
+          selectedRepFragrance.value = id;
+        }
+
+        function confirmRepFragrance() {
+          const rep = representativeFragrances.value.find(r => r.id === selectedRepFragrance.value);
+          if (rep) {
+            selectedBaseNote.value = rep.baseNote;
+            currentStep.value = 3;
+            nextTick(() => {
+              showWordSelector.value = true;
+              currentWordPool.value = round1Words;
+              currentRound.value = 1;
+            });
+          }
+        }
+
+        function selectBaseNote(note) {
+          selectedBaseNote.value = note;
+          currentStep.value = 3;
+          nextTick(() => {
+            showWordSelector.value = true;
+            currentWordPool.value = round1Words;
+            currentRound.value = 1;
+          });
+        }
+
+        function getCirclePosition(index) {
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
+          const minRadius = 280;
+          const maxRadius = Math.min(centerX, centerY) - 50;
+          const radius = Math.max(minRadius, maxRadius);
+          const angle = (index / 30) * 2 * Math.PI - Math.PI / 2;
+          const x = centerX + radius * Math.cos(angle) - 28;
+          const y = centerY + radius * Math.sin(angle) - 28;
+          return {
+            left: `${x}px`,
+            top: `${y}px`
+          };
+        }
+
+        function isRecommended(id) {
+          return recommendedIds.value.includes(id);
+        }
+
+        function isOnShelf(id) {
+          return shelf.value.includes(id);
+        }
+
+        function selectWord(word) {
+          selectedWords.value.push(word);
+          usedWords.value.push(word.id);
+          showWordSelector.value = false;
+          
+          // Generate recommendations based on selection
+          generateRecommendations();
+        }
+
+        function generateRecommendations() {
+          gamePhase.value = 'recommending';
+          
+          // Filter fragrances based on base note and not on shelf
+          let candidates = fragrances.filter(f => 
+            f.baseNote === selectedBaseNote.value && 
+            !shelf.value.includes(f.id)
+          );
+
+          // Add some from other categories for surprise (20%)
+          const otherCandidates = fragrances.filter(f => 
+            f.baseNote !== selectedBaseNote.value && 
+            !shelf.value.includes(f.id)
+          );
+
+          // Score based on selected words
+          candidates = candidates.map(f => {
+            let score = 10; // base score for matching base note
+            selectedWords.value.forEach(word => {
+              if (f.tags.some(tag => tag.includes(word.text) || word.text.includes(tag))) {
+                score += 5;
+              }
+            });
+            return { ...f, score };
+          });
+
+          // Sort by score and pick top 2-3
+          candidates.sort((a, b) => b.score - a.score);
+          let picks = candidates.slice(0, 2);
+
+          // Add one surprise pick
+          if (otherCandidates.length > 0) {
+            const surprise = otherCandidates[Math.floor(Math.random() * otherCandidates.length)];
+            picks.push(surprise);
+          } else if (candidates.length > 2) {
+            picks.push(candidates[2]);
+          }
+
+          // Shuffle picks
+          picks.sort(() => Math.random() - 0.5);
+          
+          // Wait 1 second before showing recommendations
+          setTimeout(() => {
+            recommendedIds.value = picks.map(p => p.id);
+            
+            // Animate beams
+            setTimeout(() => {
+              animateBeams();
+              gamePhase.value = 'selecting';
+            }, 300);
+          }, 1000);
+        }
+
+        function animateBeams() {
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
+          const minRadius = 280;
+          const maxRadius = Math.min(centerX, centerY) - 50;
+          const radius = Math.max(minRadius, maxRadius);
+          const circleRadius = 28;
+          const startOffset = 180; // Fixed start distance from center
+
+          const beams = recommendedIds.value.map((id, i) => {
+            const index = id - 1;
+            const angle = (index / 30) * 2 * Math.PI - Math.PI / 2;
+            const cosAngle = Math.cos(angle);
+            const sinAngle = Math.sin(angle);
+            
+            // Start point: fixed distance from center
+            const startX = centerX + startOffset * cosAngle;
+            const startY = centerY + startOffset * sinAngle;
+            
+            // End point: edge of fragrance circle
+            const endX = centerX + (radius - circleRadius) * cosAngle;
+            const endY = centerY + (radius - circleRadius) * sinAngle;
+
+            return {
+              id: `beam-${id}`,
+              fragId: id,
+              x1: startX,
+              y1: startY,
+              x2: endX,
+              y2: endY
+            };
+          });
+
+          activeBeams.value = beams;
+        }
+
+        function selectFragrance(id) {
+          if (gamePhase.value !== 'selecting') return;
+          if (!isRecommended(id)) return;
+          if (isOnShelf(id)) return;
+          
+          selectedInRound.value = id;
+        }
+
+        function confirmSelection() {
+          if (!selectedInRound.value) return;
+
+          // Add to shelf
+          const emptySlot = shelf.value.findIndex(s => s === null);
+          if (emptySlot !== -1) {
+            shelf.value[emptySlot] = selectedInRound.value;
+          }
+
+          // Clear current round
+          selectedInRound.value = null;
+          recommendedIds.value = [];
+          activeBeams.value = [];
+          gamePhase.value = 'waiting';
+
+          // Check if shelf is full
+          if (shelf.value.filter(s => s !== null).length >= 3) {
+            currentStep.value = 4;
+          } else {
+            // Show next word selector
+            currentRound.value++;
+            showNextWordPool();
+          }
+        }
+
+        function showNextWordPool() {
+          let poolKey;
+          
+          if (currentRound.value === 2) {
+            // Determine pool based on first word selection
+            const firstWord = selectedWords.value[0];
+            if (['elegant', 'romantic', 'soft'].includes(firstWord?.id)) {
+              poolKey = 'floral_deep';
+            } else if (['smoky', 'warm', 'mature'].includes(firstWord?.id)) {
+              poolKey = 'woody_deep';
+            } else if (['fresh', 'sweet', 'natural', 'light'].includes(firstWord?.id)) {
+              poolKey = 'fruity_deep';
+            } else {
+              poolKey = 'animalic_deep';
+            }
+            currentWordPool.value = round2Pools[poolKey];
+          } else if (currentRound.value === 3) {
+            poolKey = `${selectedBaseNote.value}_confirm`;
+            currentWordPool.value = round3Pools[poolKey] || round3Pools.floral_confirm;
+          }
+
+          // Filter out used words
+          currentWordPool.value = currentWordPool.value.filter(w => !usedWords.value.includes(w.id));
+          
+          showWordSelector.value = true;
+        }
+
+        function getInstructionTitle() {
+          if (gamePhase.value === 'recommending') return '正在為你挑選...';
+          if (recommendedIds.value.length > 0) return '請聞這三款香水';
+          return '選擇你想要的感覺';
+        }
+
+        function getInstructionText() {
+          if (gamePhase.value === 'recommending') return '系統正在根據你的喜好尋找適合的香水';
+          if (recommendedIds.value.length > 0) {
+            return `推薦：#${recommendedIds.value.join('、#')} — 點擊選擇你最喜歡的一款`;
+          }
+          return '點擊上方詞彙開始';
+        }
+
+        function revealResults() {
+          if (!finalChoice.value) return;
+          currentStep.value = 5;
+        }
+
+        function restartGame() {
+          currentStep.value = 1;
+          scenario.value = null;
+          selectedBaseNote.value = null;
+          selectedRepFragrance.value = null;
+          shelf.value = [null, null, null];
+          selectedInRound.value = null;
+          recommendedIds.value = [];
+          activeBeams.value = [];
+          showWordSelector.value = false;
+          currentWordPool.value = [];
+          selectedWords.value = [];
+          gamePhase.value = 'waiting';
+          finalChoice.value = null;
+          currentRound.value = 0;
+          usedWords.value = [];
+        }
+
+        return {
+          currentStep,
+          totalSteps,
+          scenario,
+          baseNotes,
+          selectedBaseNote,
+          fragrances,
+          shelf,
+          selectedInRound,
+          recommendedIds,
+          activeBeams,
+          showWordSelector,
+          currentWordPool,
+          gamePhase,
+          finalChoice,
+          winnerFragrance,
+          otherPicks,
+          representativeFragrances,
+          selectedRepFragrance,
+          goBack,
+          selectScenario,
+          selectBaseNote,
+          selectRepFragrance,
+          confirmRepFragrance,
+          getCirclePosition,
+          isRecommended,
+          isOnShelf,
+          selectWord,
+          selectFragrance,
+          confirmSelection,
+          getInstructionTitle,
+          getInstructionText,
+          revealResults,
+          restartGame
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

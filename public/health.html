@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>身體節奏｜營養方向探索</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            medical: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Sans TC', system-ui, sans-serif; }
+    .choice-tile {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, ring-color 0.2s ease;
+    }
+    .choice-tile:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    const ROUND1 = [
+      { id: 'sleep_tired', label: '😴 睡不好、睡了還是很累' },
+      { id: 'stress_anxious', label: '😮‍💨 壓力大、容易焦慮緊張' },
+      { id: 'skin_hair_nail', label: '✨ 皮膚變差、掉髮、指甲容易斷' },
+      { id: 'immunity_weak', label: '🤧 常感冒、免疫力很差' },
+      { id: 'digest_metabolism', label: '🫃 消化不好、水腫、代謝慢' },
+    ];
+
+    const ROUND2 = [
+      { id: 'late_sleep', label: '🌙 熬夜、睡眠不規律' },
+      { id: 'eat_out_low_veg', label: '🍱 外食為主、蔬果吃很少' },
+      { id: 'sedentary', label: '🪑 久坐、幾乎不運動' },
+      { id: 'high_caffeine', label: '☕ 每天大量咖啡或茶' },
+      { id: 'screen_tense', label: '📱 長時間盯螢幕、精神長期緊繃' },
+    ];
+
+    const ROUND3 = [
+      { id: 'capsule', label: '💊 膠囊／錠劑' },
+      { id: 'drink', label: '🥤 飲品／沖泡包' },
+      { id: 'food', label: '🥦 天然食物來源' },
+      { id: 'gummy', label: '🍬 軟糖／零食型' },
+    ];
+
+    const WEIGHTS = {
+      round1: {
+        sleep_tired: { magnesium: 3, gaba: 3, b_complex: 3, tryptophan: 3 },
+        stress_anxious: { magnesium: 3, gaba: 3, b_complex: 2, theanine: 3 },
+        skin_hair_nail: { collagen: 3, biotin: 3, vitamin_c: 2, zinc: 2 },
+        immunity_weak: { vitamin_c: 3, vitamin_d: 3, zinc: 3, probiotic: 2 },
+        digest_metabolism: { probiotic: 3, enzyme: 3, magnesium: 2, fiber: 3 },
+      },
+      round2: {
+        late_sleep: { melatonin: 2, b_complex: 2, magnesium: 2, antioxidant: 2 },
+        eat_out_low_veg: { multivitamin: 2, fiber: 2, probiotic: 2, vitamin_c: 1 },
+        sedentary: { coq10: 2, vitamin_d: 2, fiber: 2, magnesium: 1 },
+        high_caffeine: { magnesium: 2, b_complex: 2, theanine: 2 },
+        screen_tense: { lutein: 2, omega3: 2, magnesium: 1, antioxidant: 2 },
+      },
+    };
+
+    const INGREDIENT_INFO = {
+      magnesium: { name: '鎂', nameEn: 'Magnesium', oneLine: '有助放鬆與睡眠品質維持' },
+      gaba: { name: 'GABA', nameEn: 'Gamma-Aminobutyric Acid', oneLine: '與情緒穩定相關的胺基酸' },
+      b_complex: { name: 'B群', nameEn: 'B-Complex', oneLine: '參與能量代謝與神經機能' },
+      tryptophan: { name: '色胺酸', nameEn: 'Tryptophan', oneLine: '血清素前驅物質' },
+      theanine: { name: '茶胺酸', nameEn: 'L-Theanine', oneLine: '常見於茶類的放鬆成分' },
+      collagen: { name: '膠原蛋白', nameEn: 'Collagen', oneLine: '結締組織重要成分' },
+      biotin: { name: '生物素', nameEn: 'Biotin', oneLine: '與角蛋白代謝相關' },
+      vitamin_c: { name: '維生素C', nameEn: 'Vitamin C', oneLine: '抗氧化與膠原合成' },
+      zinc: { name: '鋅', nameEn: 'Zinc', oneLine: '免疫與皮膚健康相關' },
+      probiotic: { name: '益生菌', nameEn: 'Probiotics', oneLine: '消化道菌相平衡' },
+      enzyme: { name: '消化酵素', nameEn: 'Digestive Enzymes', oneLine: '幫助食物分解' },
+      fiber: { name: '膳食纖維', nameEn: 'Fiber', oneLine: '促進腸道蠕動' },
+      melatonin: { name: '褪黑激素', nameEn: 'Melatonin', oneLine: '調節生理時鐘' },
+      antioxidant: { name: '抗氧化物', nameEn: 'Antioxidants', oneLine: '減少氧化壓力' },
+      multivitamin: { name: '綜合維生素', nameEn: 'Multivitamin', oneLine: '補足多種微量營養素' },
+      coq10: { name: '輔酶Q10', nameEn: 'CoQ10', oneLine: '能量代謝相關' },
+      vitamin_d: { name: '維生素D', nameEn: 'Vitamin D', oneLine: '骨骼與免疫調節' },
+      lutein: { name: '葉黃素', nameEn: 'Lutein', oneLine: '晶亮保養常見成分' },
+      omega3: { name: 'Omega-3', nameEn: 'Omega-3', oneLine: '脂肪酸補充' },
+    };
+
+    function placeholderImg(seed) {
+      return `https://picsum.photos/seed/${encodeURIComponent(seed)}/400/300`;
+    }
+
+    function resolveProductImg(imgValue) {
+      if (!imgValue) return placeholderImg('health-default');
+      if (imgValue.startsWith('./') || imgValue.startsWith('../') || imgValue.startsWith('/')) {
+        return imgValue;
+      }
+      return placeholderImg(imgValue);
+    }
+
+    const FAKE_PRODUCTS = {
+      magnesium: {
+        capsule: { brand: 'NOW Foods 健而婷', name: '甘胺酸鎂 400mg', price: 'NT$680', img: './images/health/MgTablet.png' },
+        drink: { brand: 'Natural Vitality Calm', name: '舒壓鎂粉', price: 'NT$1000', img: './images/health/MgPowder.png' },
+        food: { brand: '—', name: '南瓜籽／菠菜／黑巧克力', price: '—', img: 'magnesium-food' },
+        gummy: { brand: 'OLLY', name: '舒緩壓力鎂軟糖', price: 'NT$703', img: './images/health/MgGummies.png' },
+      },
+      gaba: {
+        capsule: { brand: "BHK's", name: '夜萃EX 素食膠囊', price: 'NT$690', img: './images/health/GabaPill' },
+        drink: { brand: '克寧', name: '晚安奶粉 (含GABA)', price: 'NT$380', img: './images/health/GabaPowder.png' },
+        food: { brand: '—', name: '發酵食品／發芽糙米／味噌', price: '—', img: 'gaba-food' },
+        gummy: { brand: '益好夢', name: '睡眠GABA軟糖', price: 'NT$450', img: './images/health/GabaGummies.png' },
+      },
+      b_complex: {
+        capsule: { brand: 'DHC', name: '維他命B群 (30日份)', price: 'NT$490', img: './images/health/BPill.png' },
+        drink: { brand: '拜維佳', name: 'B群發泡錠', price: 'NT$550', img: './images/health/BPowder.png' },
+        food: { brand: '—', name: '全穀／豆類／蛋類', price: '—', img: 'bcomplex-food' },
+        gummy: { brand: '然萃維', name: '維生素B群軟糖', price: 'NT$390', img: './images/health/BGummies.png' },
+      },
+      tryptophan: {
+        capsule: { brand: 'NOW Foods', name: 'L-色胺酸 500mg', price: 'NT$500', img: './images/health/TrpPill.png' },
+        drink: { brand: '克寧', name: '晚安奶粉 (含色胺酸)', price: 'NT$460', img: './images/health/TrpPowder.png' },
+        food: { brand: '—', name: '香蕉／乳製品／火雞肉', price: '—', img: 'trp-food' },
+        gummy: { brand: 'OLLY', name: '舒眠軟糖 (含色胺酸/褪黑激素)', price: 'NT$704', img: './images/health/TrpGummies.png' },
+      },
+      theanine: {
+        capsule: { brand: 'NOW Foods', name: '茶胺酸 200mg', price: 'NT$580', img: './images/health/TheaPill.png' },
+        drink: { brand: '伊藤園', name: '抹茶粉 (天然茶胺酸)', price: 'NT$399', img: './images/health/TheaPowder.png' },
+        food: { brand: '—', name: '綠茶／抹茶', price: '—', img: 'thea-food' },
+        gummy: { brand: "Nature's Way", name: '舒緩茶胺酸軟糖', price: 'NT$460', img: './images/health/TheaGummies.png' },
+      },
+      collagen: {
+        capsule: { brand: "BHK's", name: '裸耀膠原蛋白錠', price: 'NT$790', img: './images/health/ColPill.png' },
+        drink: { brand: '三得利', name: '蜜露珂娜 膠原蛋白粉', price: 'NT$980', img: './images/health/ColPowder.png' },
+        food: { brand: '—', name: '魚皮／雞湯／豬腳', price: '—', img: 'col-food' },
+        gummy: { brand: "Nature's Bounty", name: '膠原蛋白軟糖', price: 'NT$560', img: './images/health/ColGummies.png' },
+      },
+      biotin: {
+        capsule: { brand: 'NOW Foods', name: '生物素 5000mcg', price: 'NT$350', img: './images/health/BioPill.png' },
+        drink: { brand: 'Vital Proteins', name: '膠原蛋白+生物素粉', price: 'NT$850', img: './images/health/BioPowder.png' },
+        food: { brand: '—', name: '蛋黃／堅果／豆類', price: '—', img: 'bio-food' },
+        gummy: { brand: 'Natrol', name: '生物素草莓軟糖', price: 'NT$480', img: './images/health/BioGummies.png' },
+      },
+      vitamin_c: {
+        capsule: { brand: 'DHC', name: '維他命C (30日份)', price: 'NT$150', img: './images/health/VcPill.png' },
+        drink: { brand: '力度伸', name: '維他命C+D+鋅發泡錠', price: 'NT$650', img: './images/health/VcPowder.png' },
+        food: { brand: '—', name: '芭樂／奇異果／甜椒', price: '—', img: 'vc-food' },
+        gummy: { brand: '義美生機', name: '維生素C軟糖', price: 'NT$120', img: './images/health/VcGummies.png' },
+      },
+      zinc: {
+        capsule: { brand: '克補+鋅', name: '膜衣錠', price: 'NT$550', img: './images/health/ZnPill.png' },
+        drink: { brand: '好立善', name: '維生素C+鋅發泡錠', price: 'NT$250', img: './images/health/ZnPowder.png' },
+        food: { brand: '—', name: '牡蠣／紅肉／南瓜籽', price: '—', img: 'zn-food' },
+        gummy: { brand: "Nature's Way", name: '接骨木+鋅軟糖', price: 'NT$430', img: './images/health/ZnGummies.png' },
+      },
+      probiotic: {
+        capsule: { brand: '營養師輕食', name: '300億機能益生菌', price: 'NT$1,480', img: './images/health/ProbPill.png' },
+        drink: { brand: '娘家', name: '益生菌粉包', price: 'NT$1,200', img: './images/health/ProbPowder.png' },
+        food: { brand: '—', name: '無糖優格／泡菜／味噌', price: '—', img: 'prob-food' },
+        gummy: { brand: 'WEIDER 威德', name: '益生菌果凍', price: 'NT$590', img: './images/health/ProbGummies.png' },
+      },
+      enzyme: {
+        capsule: { brand: 'Wakamoto 若元', name: '胃腸錠', price: 'NT$650', img: './images/health/EnzPill.png' },
+        drink: { brand: '新普利', name: '夜酵素粉', price: 'NT$890', img: './images/health/EnzPowder.png' },
+        food: { brand: '—', name: '鳳梨／木瓜／奇異果', price: '—', img: 'enz-food' },
+        gummy: { brand: 'OLLY', name: '消化酵素軟糖', price: 'NT$480', img: './images/health/EnzGummies.png' },
+      },
+      fiber: {
+        capsule: { brand: 'NOW Foods', name: '洋車前子殼膠囊', price: 'NT$460', img: './images/health/FibPill.png' },
+        drink: { brand: '每朝健康', name: '難消化性麥芽糊精粉包', price: 'NT$520', img: './images/health/FibPowder.png' },
+        food: { brand: '—', name: '燕麥／地瓜／深綠色蔬菜', price: '—', img: 'fib-food' },
+        gummy: { brand: 'Vitafusion', name: '膳食纖維無糖軟糖', price: 'NT$430', img: './images/health/FibGummies.png' },
+      },
+      melatonin: {
+        capsule: { brand: '示範國際牌', name: '褪黑激素錠（示意）', price: '約 NT$640', img: './images/health/MelPill.png' },
+        drink: { brand: '示範國際牌', name: '夜間舒緩飲（示意）', price: '約 NT$480', img: './images/health/MelPowder.png' },
+        food: { brand: '—', name: '櫻桃／燕麥／核桃（飲食方向）', price: '—', img: 'mel-food' },
+        gummy: { brand: '示範國際牌', name: '褪黑激素軟糖（示意）', price: '約 NT$550', img: './images/health/MelGummies.png' },
+      },
+      antioxidant: {
+        capsule: { brand: '示範國際牌', name: '抗氧化複方膠囊（示意）', price: '約 NT$690', img: './images/health/AOPill.png' },
+        drink: { brand: '示範國際牌', name: '莓果抗氧化飲（示意）', price: '約 NT$430', img: './images/health/AOPowder.png' },
+        food: { brand: '—', name: '藍莓／番茄／深綠蔬菜（飲食方向）', price: '—', img: 'ao-food' },
+        gummy: { brand: '示範國際牌', name: '抗氧化軟糖（示意）', price: '約 NT$510', img: './images/health/AOGummies.png' },
+      },
+      multivitamin: {
+        capsule: { brand: '示範國際牌', name: '綜合維生素錠（示意）', price: '約 NT$750', img: './images/health/MultiPill.png' },
+        drink: { brand: '示範國際牌', name: '綜合維他命沖泡包（示意）', price: '約 NT$360', img: './images/health/MultiPowder.png' },
+        food: { brand: '—', name: '均衡飲食／原型食物（飲食方向）', price: '—', img: 'multi-food' },
+        gummy: { brand: '示範國際牌', name: '綜合維他命軟糖（示意）', price: '約 NT$480', img: './images/health/MultiGummies.png' },
+      },
+      coq10: {
+        capsule: { brand: '示範國際牌', name: '輔酶 Q10 膠囊（示意）', price: '約 NT$830', img: './images/health/CoQPill.png' },
+        drink: { brand: '示範國際牌', name: 'Q10 能量飲（示意）', price: '約 NT$520', img: './images/health/CoQPowder.png' },
+        food: { brand: '—', name: '鯖魚／牛肉／堅果（飲食方向）', price: '—', img: 'coq-food' },
+        gummy: { brand: '示範國際牌', name: 'Q10 軟糖（示意）', price: '約 NT$590', img: './images/health/CoQGummies.png' },
+      },
+      vitamin_d: {
+        capsule: { brand: '示範國際牌', name: '維生素 D3 膠囊（示意）', price: '約 NT$490', img: './images/health/D3Pill.png' },
+        drink: { brand: '示範國際牌', name: '維生素 D 沖泡飲（示意）', price: '約 NT$390', img: './images/health/D3Powder.png' },
+        food: { brand: '—', name: '鮭魚／蛋黃／菇類（飲食方向）', price: '—', img: 'd3-food' },
+        gummy: { brand: '示範國際牌', name: '維生素 D 軟糖（示意）', price: '約 NT$450', img: './images/health/D3Gummies.png' },
+      },
+      lutein: {
+        capsule: { brand: '示範國際牌', name: '葉黃素軟膠囊（示意）', price: '約 NT$860', img: './images/health/LutPill.png' },
+        drink: { brand: '示範國際牌', name: '晶亮飲（示意）', price: '約 NT$560', img: './images/health/LutPowder.png' },
+        food: { brand: '—', name: '菠菜／羽衣甘藍／玉米（飲食方向）', price: '—', img: 'lut-food' },
+        gummy: { brand: '示範國際牌', name: '葉黃素軟糖（示意）', price: '約 NT$620', img: './images/health/LutGummies.png' },
+      },
+      omega3: {
+        capsule: { brand: '示範國際牌', name: 'Omega-3 魚油膠囊（示意）', price: '約 NT$920', img: './images/health/O3Pill.png' },
+        drink: { brand: '示範國際牌', name: 'Omega-3 乳化飲（示意）', price: '約 NT$610', img: './images/health/O3Powder.png' },
+        food: { brand: '—', name: '鮭魚／鯖魚／亞麻仁籽（飲食方向）', price: '—', img: 'o3-food' },
+        gummy: { brand: '示範國際牌', name: 'Omega-3 軟糖（示意）', price: '約 NT$680', img: './images/health/O3Gummies.png' },
+      },
+      default: {
+        capsule: { brand: '示範國際牌', name: '綜合營養膠囊（示意）', price: '約 NT$750', img: './images/health/GenPill.png' },
+        drink: { brand: '示範國際牌', name: '綜合營養沖泡飲（示意）', price: '約 NT$360', img: './images/health/GenPowder.png' },
+        food: { brand: '—', name: '均衡飲食、原型食物為主（示意）', price: '—', img: 'gen-food' },
+        gummy: { brand: '示範國際牌', name: '綜合營養軟糖（示意）', price: '約 NT$480', img: './images/health/GenGummies.png' },
+      },
+    };
+
+    const DISCLAIMER = '僅供參考，不取代醫師／藥師／營養師';
+
+    createApp({
+      setup() {
+        const step = ref('intro');
+        const r1 = ref(null);
+        const r2 = ref(null);
+        const r3 = ref(null);
+
+        const scores = computed(() => {
+          const s = {};
+          const add = (tbl) => {
+            if (!tbl) return;
+            Object.entries(tbl).forEach(([k, v]) => {
+              s[k] = (s[k] || 0) + v;
+            });
+          };
+          add(WEIGHTS.round1[r1.value]);
+          add(WEIGHTS.round2[r2.value]);
+          return s;
+        });
+
+        const ranked = computed(() => {
+          return Object.entries(scores.value)
+            .sort((a, b) => b[1] - a[1])
+            .map(([id]) => id);
+        });
+
+        const topIngredient = computed(() => ranked.value[0] || null);
+        const secondIngredients = computed(() => ranked.value.slice(1, 3));
+
+        const mainProduct = computed(() => {
+          const id = topIngredient.value;
+          const form = r3.value || 'capsule';
+          const pool = FAKE_PRODUCTS[id] || FAKE_PRODUCTS.default;
+          return pool[form] || pool.capsule;
+        });
+
+        function productForIngredient(ingId) {
+          const form = r3.value || 'capsule';
+          const pool = FAKE_PRODUCTS[ingId] || FAKE_PRODUCTS.default;
+          return pool[form] || pool.capsule;
+        }
+
+        function infoFor(id) {
+          return INGREDIENT_INFO[id] || { name: id, nameEn: '', oneLine: '' };
+        }
+
+        function pickRound1(id) {
+          r1.value = id;
+          step.value = 'round2';
+        }
+        function pickRound2(id) {
+          r2.value = id;
+          step.value = 'round3';
+        }
+        function pickRound3(id) {
+          r3.value = id;
+          step.value = 'result';
+        }
+        function restart() {
+          r1.value = null;
+          r2.value = null;
+          r3.value = null;
+          step.value = 'intro';
+        }
+
+        function onImageError(event, seed) {
+          const fallback = placeholderImg(seed || 'health-default');
+          if (event?.target && event.target.src !== fallback) {
+            event.target.src = fallback;
+          }
+        }
+
+        function goBack() {
+          if (step.value === 'round1') {
+            step.value = 'intro';
+          } else if (step.value === 'round2') {
+            r2.value = null;
+            step.value = 'round1';
+          } else if (step.value === 'round3') {
+            r3.value = null;
+            step.value = 'round2';
+          } else if (step.value === 'result') {
+            step.value = 'round3';
+          } else {
+            window.history.back();
+          }
+        }
+
+        const progressStyle = computed(() => {
+          if (step.value === 'round1') return { width: '33.333%' };
+          if (step.value === 'round2') return { width: '66.666%' };
+          if (step.value === 'round3') return { width: '100%' };
+          return { width: '0%' };
+        });
+
+        return {
+          step,
+          r1,
+          r2,
+          r3,
+          ROUND1,
+          ROUND2,
+          ROUND3,
+          DISCLAIMER,
+          scores,
+          ranked,
+          topIngredient,
+          secondIngredients,
+          mainProduct,
+          productForIngredient,
+          infoFor,
+          pickRound1,
+          pickRound2,
+          pickRound3,
+          restart,
+          goBack,
+          progressStyle,
+          resolveProductImg,
+          onImageError,
+          placeholderImg,
+        };
+      },
+      template: `
+        <div class="flex min-h-screen flex-col bg-gradient-to-b from-white via-slate-50/80 to-medical-50/30 pb-24">
+          <header class="sticky top-0 z-40 shrink-0 border-b border-slate-100/80 bg-white/80 backdrop-blur-md">
+            <div class="mx-auto flex max-w-2xl items-center gap-3 px-4 py-3 sm:px-6">
+              <div v-else class="w-10 shrink-0"></div>
+              <div class="w-10 shrink-0"></div>
+            </div>
+            <div v-if="step === 'round1' || step === 'round2' || step === 'round3'" class="h-0.5 w-full bg-slate-100">
+              <div
+                class="h-full bg-gradient-to-r from-medical-400 to-medical-600 transition-all duration-500 ease-out"
+                :style="progressStyle"
+              ></div>
+            </div>
+          </header>
+          
+          <main
+            class="flex w-full min-h-0 min-w-0 flex-1 flex-col items-center px-4 sm:px-6"
+            :class="step === 'result' ? 'justify-start overflow-y-auto overflow-x-hidden py-8' : 'justify-center py-6 sm:py-10'"
+          >
+            <div v-if="step !== 'intro'" class="w-full max-w-2xl pb-4 sm:pb-6">
+              <button
+                type="button"
+                class="choice-tile inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/90 bg-white/90 text-slate-600 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-slate-400 hover:text-slate-800 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500"
+                @click="goBack"
+                aria-label="返回上一頁"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4.5 w-4.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- 開場 -->
+            <section v-if="step === 'intro'" class="w-full max-w-2xl text-center">
+              <h1 class="text-3xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-4xl">
+                最近，身體<br class="sm:hidden" />在跟你說什麼？
+              </h1>
+              <p class="mx-auto mt-6 max-w-md text-base leading-relaxed text-slate-600">
+                用幾個直覺的選擇，聚焦適合你的營養
+              </p>
+              <button
+                type="button"
+                class="choice-tile mt-12 inline-flex items-center justify-center rounded-full bg-medical-600 px-10 py-4 text-base font-medium text-white shadow-xl shadow-medical-600/20 hover:bg-medical-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500 focus-visible:ring-offset-2"
+                @click="step = 'round1'"
+              >
+                開始探索
+              </button>
+            </section>
+
+            <!-- 第一組：上三下二 -->
+            <section v-if="step === 'round1'" class="w-full max-w-2xl text-center">
+              <h2 class="mx-auto max-w-lg text-2xl font-semibold leading-snug text-slate-900 sm:text-3xl">
+                哪一件事最佔據你的注意力？
+              </h2>
+              <div class="mt-10 flex flex-col gap-4">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <button
+                    v-for="opt in ROUND1.slice(0, 3)"
+                    :key="opt.id"
+                    type="button"
+                    class="choice-tile rounded-3xl bg-white px-5 py-6 text-center text-[15px] font-medium leading-snug text-slate-800 ring-1 ring-slate-100 shadow-sm hover:shadow-md hover:ring-medical-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500"
+                    @click="pickRound1(opt.id)"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+                <div class="flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-4">
+                  <button
+                    v-for="opt in ROUND1.slice(3, 5)"
+                    :key="opt.id"
+                    type="button"
+                    class="choice-tile w-full rounded-3xl bg-white px-5 py-6 text-center text-[15px] font-medium leading-snug text-slate-800 ring-1 ring-slate-100 shadow-sm hover:shadow-md hover:ring-medical-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500 sm:w-[calc((100%-1rem)/3)] sm:max-w-[240px]"
+                    @click="pickRound1(opt.id)"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 第二組：上三下二 -->
+            <section v-if="step === 'round2'" class="w-full max-w-2xl text-center">
+              <h2 class="mx-auto max-w-lg text-2xl font-semibold leading-snug text-slate-900 sm:text-3xl">
+                平常的日子，比較像哪一種節奏？
+              </h2>
+              <div class="mt-10 flex flex-col gap-4">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <button
+                    v-for="opt in ROUND2.slice(0, 3)"
+                    :key="opt.id"
+                    type="button"
+                    class="choice-tile rounded-3xl bg-white px-5 py-6 text-center text-[15px] font-medium leading-snug text-slate-800 ring-1 ring-slate-100 shadow-sm hover:shadow-md hover:ring-medical-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500"
+                    @click="pickRound2(opt.id)"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+                <div class="flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-4">
+                  <button
+                    v-for="opt in ROUND2.slice(3, 5)"
+                    :key="opt.id"
+                    type="button"
+                    class="choice-tile w-full rounded-3xl bg-white px-5 py-6 text-center text-[15px] font-medium leading-snug text-slate-800 ring-1 ring-slate-100 shadow-sm hover:shadow-md hover:ring-medical-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500 sm:w-[calc((100%-1rem)/3)] sm:max-w-[240px]"
+                    @click="pickRound2(opt.id)"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 第三組：四格 -->
+            <section v-if="step === 'round3'" class="w-full max-w-2xl text-center">
+              <h2 class="mx-auto max-w-lg text-2xl font-semibold leading-snug text-slate-900 sm:text-3xl">
+                補充營養時，你比較順手的方式是？
+              </h2>
+              <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <button
+                  v-for="opt in ROUND3"
+                  :key="opt.id"
+                  type="button"
+                  class="choice-tile rounded-3xl bg-white px-6 py-7 text-center text-[15px] font-medium leading-snug text-slate-800 ring-1 ring-slate-100 shadow-sm hover:shadow-md hover:ring-medical-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-medical-500"
+                  @click="pickRound3(opt.id)"
+                >
+                  {{ opt.label }}
+                </button>
+              </div>
+            </section>
+
+            <!-- 結果：雜誌式 -->
+            <section v-if="step === 'result'" class="w-full min-w-0 max-w-2xl space-y-10 text-center">
+              <div>
+                <p class="text-sm text-medical-700">為你整理</p>
+                <h2 class="mx-auto mt-1 max-w-lg text-2xl font-semibold text-slate-900 sm:text-3xl">
+                  此刻值得留意的方向
+                </h2>
+              </div>
+
+              <article class="min-w-0 w-full max-w-full overflow-hidden rounded-[1.75rem] bg-white ring-1 ring-slate-100 shadow-lg shadow-slate-200/40">
+                <div class="flex w-full min-w-0 max-w-full items-center justify-center overflow-hidden bg-slate-100 aspect-[4/3] sm:aspect-[16/10]">
+                  <img
+                    :src="resolveProductImg(mainProduct.img)"
+                    :alt="mainProduct.name"
+                    class="min-w-0 max-h-full max-w-full object-contain object-center"
+                    @error="onImageError($event, mainProduct.img)"
+                  />
+                </div>
+                <div class="space-y-4 p-6 sm:p-8">
+                  <h3 class="text-xl font-semibold text-slate-900 sm:text-2xl">
+                    {{ infoFor(topIngredient).name }}
+                    <span class="mt-1 block text-sm font-normal text-slate-500">{{ infoFor(topIngredient).nameEn }}</span>
+                  </h3>
+                  <p class="mx-auto max-w-md text-base leading-relaxed text-slate-600">{{ infoFor(topIngredient).oneLine }}</p>
+                  <div class="border-t border-slate-100 pt-5">
+                    <p class="text-xs uppercase tracking-wider text-slate-400">參考搭配（示意）</p>
+                    <p class="mt-2 font-medium text-slate-800">{{ mainProduct.brand }} — {{ mainProduct.name }}</p>
+                    <p class="mt-1 text-slate-600">{{ mainProduct.price }}</p>
+                  </div>
+                </div>
+              </article>
+
+              <div class="rounded-2xl bg-medical-50/70 p-6 text-center ring-1 ring-medical-100">
+                <p class="text-xs uppercase tracking-wider text-medical-700">推薦文案</p>
+                <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-700 sm:text-base">
+                  依據你目前的狀態，我們推薦以
+                  <span class="font-semibold text-slate-900">{{ infoFor(topIngredient).name }}</span>
+                  作為優先補充方向。這款
+                  <span class="font-semibold text-slate-900">{{ mainProduct.name }}</span>
+                  為示意產品，主打日常好執行、補充門檻低，適合先從連續 2-4 週建立節奏，逐步觀察身體回饋。
+                </p>
+              </div>
+
+              <p class="mx-auto max-w-md text-sm leading-relaxed text-slate-600">
+                每個人的狀況不同；若正在用藥、懷孕或慢性病，建議先與專業人員討論再調整補充方式。
+              </p>
+
+              <button
+                type="button"
+                class="mx-auto w-full max-w-xs rounded-full border border-slate-200 bg-white py-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                @click="restart"
+              >
+                再探索一次
+              </button>
+            </section>
+          </main>
+
+          <!-- 每頁固定免責（置底） -->
+          <footer class="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200/90 bg-white/95 px-4 py-2.5 text-center backdrop-blur-md">
+            <p class="text-[11px] leading-snug text-slate-500 sm:text-xs">
+              {{ DISCLAIMER }}
+            </p>
+          </footer>
+        </div>
+      `,
+    }).mount('#app');
+  </script>
+</body>
+</html>

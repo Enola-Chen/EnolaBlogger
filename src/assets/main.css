@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: linear-gradient(
+      120deg,
+      #fff3d4 0%,
+      #fff9e6 25%,
+      #fffdf7 50%,
+      #ecfdf5 75%,
+      #d1fae5 100%
+    );
+    background-attachment: fixed;
+  }
+}
+
+/* 滑鼠追蹤光暈 */
+.spotlight {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: radial-gradient(
+    600px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(16, 185, 129, 0.08),
+    transparent 80%
+  );
+  transition: background 0.3s ease;
+}
+
+.nav-indicator {
+  width: 32px;
+  height: 2px;
+  background: #a7f3d0;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover .nav-indicator,
+.nav-link.router-link-active .nav-indicator {
+  width: 64px;
+  background: #10b981;
+}
+
+.nav-link:hover .nav-text,
+.nav-link.router-link-active .nav-text {
+  color: #10b981;
+}
+
+.project-card {
+  transition: all 0.3s ease;
+  border-radius: 16px;
+}
+
+.project-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);
+}
+
+.project-card:hover .project-title {
+  color: #10b981;
+}
+
+.project-card:hover .project-arrow {
+  transform: translate(4px, -4px);
+}
+
+.exp-card {
+  transition: all 0.3s ease;
+  border-radius: 16px;
+}
+
+.exp-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);
+}
+
+.exp-card:hover .exp-title {
+  color: #10b981;
+}
+
+.tag {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #065f46;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.tag:hover {
+  background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.social-link {
+  color: #6b7280;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  color: #10b981;
+  transform: translateY(-3px);
+}
+
+.link-hover {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #10b981;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.link-hover:hover {
+  color: #059669;
+}
+
+.link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #10b981;
+  transition: width 0.3s ease;
+}
+
+.link-hover:hover::after {
+  width: 100%;
+}
+
+.section-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.section-fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ecfdf5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a7f3d0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* 浮動裝飾：需 position:fixed 以對齊視窗（由 PortfolioLayout 內給定位類） */
+.floating-shape {
+  position: fixed;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  pointer-events: none;
+  animation: floatShape 20s ease-in-out infinite;
+}
+
+@keyframes floatShape {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(30px, -30px);
+  }
+  50% {
+    transform: translate(-20px, 20px);
+  }
+  75% {
+    transform: translate(20px, 10px);
+  }
+}
+
+.text-highlight {
+  color: #059669;
+  font-weight: 500;
+}

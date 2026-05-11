@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ana Chen 的專案作品集 - 前端開發、AIoT、實驗性專案">
+  <meta name="theme-color" content="#059669">
+  <title>作品集 | Ana Chen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mint: {
+              50: '#ECFDF5',
+              100: '#D1FAE5',
+              200: '#A7F3D0',
+              300: '#6EE7B7',
+              400: '#34D399',
+              500: '#10B981',
+              600: '#059669',
+              700: '#065F46',
+              800: '#064E3B',
+              900: '#022C22',
+            },
+            coral: '#FF8566',
+            warmYellow: '#FFD93D',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            '2xl': '16px',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    html { scroll-behavior: smooth; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15); }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .filter-btn.active { background-color: #10B981; color: white; }
+    .project-card { transition: all 0.4s ease; }
+    .project-card.hidden { opacity: 0; transform: scale(0.8); position: absolute; pointer-events: none; }
+    .project-card.visible { opacity: 1; transform: scale(1); position: relative; pointer-events: auto; }
+  </style>
+</head>
+<body class="font-sans text-gray-800 bg-white">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-mint-100">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="text-xl font-bold text-mint-500">Ana.</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="projects.html" class="text-mint-500 font-medium">作品集</a>
+        <a href="index.html#skills" class="text-gray-600 hover:text-mint-500 transition">技能</a>
+        <a href="index.html#community" class="text-gray-600 hover:text-mint-500 transition">社群</a>
+        <a href="about.html" class="text-gray-600 hover:text-mint-500 transition">關於我</a>
+        <a href="contact.html" class="px-5 py-2 bg-mint-500 text-white rounded-full hover:bg-mint-600 transition">聯絡我</a>
+      </div>
+      <button class="md:hidden text-gray-600" id="menuBtn">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="hidden md:hidden bg-white border-t border-mint-100 px-6 py-4" id="mobileMenu">
+      <div class="flex flex-col gap-4">
+        <a href="projects.html" class="text-mint-500 font-medium">作品集</a>
+        <a href="index.html#skills" class="text-gray-600 hover:text-mint-500">技能</a>
+        <a href="index.html#community" class="text-gray-600 hover:text-mint-500">社群</a>
+        <a href="about.html" class="text-gray-600 hover:text-mint-500">關於我</a>
+        <a href="contact.html" class="text-center px-5 py-2 bg-mint-500 text-white rounded-full">聯絡我</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="pt-32 pb-16 bg-gradient-to-b from-mint-50 to-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-3xl">
+        <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-6">
+          我的作品
+        </span>
+        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          專案作品集
+        </h1>
+        <p class="text-xl text-gray-500 leading-relaxed">
+          從前端網頁開發到 AIoT 系統整合，每個專案都是解決問題的實踐。<br class="hidden md:block">
+          這裡展示了我在不同領域的探索與成果。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Tabs -->
+  <section class="sticky top-[73px] z-40 bg-white border-b border-gray-100 py-4">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-wrap gap-3">
+        <button class="filter-btn active px-6 py-2 rounded-full border border-mint-200 text-sm font-medium transition hover:bg-mint-500 hover:text-white hover:border-mint-500" data-filter="all">
+          全部
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-gray-600 text-sm font-medium transition hover:bg-mint-500 hover:text-white hover:border-mint-500" data-filter="web">
+          🌐 網頁開發
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-gray-600 text-sm font-medium transition hover:bg-mint-500 hover:text-white hover:border-mint-500" data-filter="aiot">
+          🤖 AIoT
+        </button>
+        <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-gray-600 text-sm font-medium transition hover:bg-mint-500 hover:text-white hover:border-mint-500" data-filter="experiment">
+          🧪 實驗專案
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Grid -->
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projectsGrid">
+        
+        <!-- Project 1: 智慧植栽監測系統 -->
+        <article class="project-card visible bg-white rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100" data-category="aiot">
+          <div class="aspect-video bg-gradient-to-br from-mint-100 to-mint-200 flex items-center justify-center relative overflow-hidden">
+            <span class="text-7xl">🌱</span>
+            <div class="absolute top-4 right-4">
+              <span class="px-3 py-1 bg-white/80 backdrop-blur-sm text-mint-600 rounded-full text-xs font-medium">AIoT</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">智慧植栽監測系統</h3>
+            <p class="text-gray-500 mb-4 line-clamp-2">結合 Jetson Nano 與多種感測器，打造即時監控植物生長環境的 AIoT 系統，可自動調節澆水與光照</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Vue.js</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Jetson Nano</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Python</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-mint-500 font-medium hover:text-mint-600 transition">
+              查看詳情
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 2: LINE 社群管理平台 -->
+        <article class="project-card visible bg-white rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100" data-category="web">
+          <div class="aspect-video bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center relative overflow-hidden">
+            <span class="text-7xl">💬</span>
+            <div class="absolute top-4 right-4">
+              <span class="px-3 py-1 bg-white/80 backdrop-blur-sm text-emerald-600 rounded-full text-xs font-medium">Web</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">LINE 社群管理平台</h3>
+            <p class="text-gray-500 mb-4 line-clamp-2">為社群打造的完整會員管理與互動系統，包含積分制度、活動報名、數據分析等功能</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Vue.js</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Flask</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">LINE API</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-mint-500 font-medium hover:text-mint-600 transition">
+              查看詳情
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 3: 互動式作品集網站 -->
+        <article class="project-card visible bg-white rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100" data-category="web">
+          <div class="aspect-video bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center relative overflow-hidden">
+            <span class="text-7xl">🎨</span>
+            <div class="absolute top-4 right-4">
+              <span class="px-3 py-1 bg-white/80 backdrop-blur-sm text-purple-600 rounded-full text-xs font-medium">Web</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">互動式作品集網站</h3>
+            <p class="text-gray-500 mb-4 line-clamp-2">使用 Vue.js 與 Tailwind CSS 打造的現代化 PWA 個人網站，支援離線瀏覽與深色模式</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Vue.js</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Tailwind</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">PWA</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-mint-500 font-medium hover:text-mint-600 transition">
+              查看詳情
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 4: 智慧家庭控制中心 -->
+        <article class="project-card visible bg-white rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100" data-category="aiot">
+          <div class="aspect-video bg-gradient-to-br from-blue-100 to-cyan-200 flex items-center justify-center relative overflow-hidden">
+            <span class="text-7xl">🏠</span>
+            <div class="absolute top-4 right-4">
+              <span class="px-3 py-1 bg-white/80 backdrop-blur-sm text-blue-600 rounded-full text-xs font-medium">AIoT</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">智慧家庭控制中心</h3>
+            <p class="text-gray-500 mb-4 line-clamp-2">整合多種智慧家電的統一控制介面，支援語音控制與自動化場景設定</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">React</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">MQTT</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">ESP32</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-mint-500 font-medium hover:text-mint-600 transition">
+              查看詳情
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 5: AI 表情辨識小遊戲 -->
+        <article class="project-card visible bg-white rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100" data-category="experiment">
+          <div class="aspect-video bg-gradient-to-br from-warmYellow/40 to-coral/30 flex items-center justify-center relative overflow-hidden">
+            <span class="text-7xl">😄</span>
+            <div class="absolute top-4 right-4">
+              <span class="px-3 py-1 bg-white/80 backdrop-blur-sm text-orange-600 rounded-full text-xs font-medium">實驗</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">AI 表情辨識小遊戲</h3>
+            <p class="text-gray-500 mb-4 line-clamp-2">使用 TensorFlow.js 在瀏覽器中即時辨識表情的互動遊戲，考驗你的演技！</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">TensorFlow.js</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">WebRTC</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Canvas</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-mint-500 font-medium hover:text-mint-600 transition">
+              查看詳情
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 6: 即時協作白板 -->
+        <article class="project-card visible bg-white rounded-2xl overflow-hidden shadow-lg card-hover border border-gray-100" data-category="web">
+          <div class="aspect-video bg-gradient-to-br from-indigo-100 to-violet-200 flex items-center justify-center relative overflow-hidden">
+            <span class="text-7xl">🎯</span>
+            <div class="absolute top-4 right-4">
+              <span class="px-3 py-1 bg-white/80 backdrop-blur-sm text-indigo-600 rounded-full text-xs font-medium">Web</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">即時協作白板</h3>
+            <p class="text-gray-500 mb-4 line-clamp-2">支援多人同時繪圖的即時協作工具，使用 WebSocket 實現毫秒級同步</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Vue.js</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">WebSocket</span>
+              <span class="px-3 py-1 bg-mint-50 text-mint-600 rounded-full text-sm">Canvas</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-mint-500 font-medium hover:text-mint-600 transition">
+              查看詳情
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Empty State -->
+      <div class="hidden text-center py-16" id="emptyState">
+        <span class="text-6xl mb-4 block">🔍</span>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">沒有找到相關專案</h3>
+        <p class="text-gray-500">試試其他分類篩選</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        有專案想法想討論？
+      </h2>
+      <p class="text-lg text-gray-500 mb-8">
+        無論是技術合作還是創意激盪，都歡迎找我聊聊！
+      </p>
+      <a href="contact.html" class="inline-flex items-center justify-center px-8 py-4 bg-mint-500 text-white rounded-full font-semibold hover:bg-mint-600 transition shadow-lg shadow-mint-500/30">
+        開始對話
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="text-xl font-bold text-mint-400">Ana.</a>
+          <span class="text-gray-500">|</span>
+          <span class="text-gray-400 text-sm">前端工程師 & AIoT 探索者</span>
+        </div>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="mailto:hello@ana.dev" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+        <p>© 2026 Ana Chen. 以 💚 打造</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom CTA -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-40">
+    <a href="contact.html" class="block w-full py-3 bg-mint-500 text-white text-center rounded-full font-semibold">
+      聯絡我
+    </a>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Filter functionality
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    const emptyState = document.getElementById('emptyState');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active button
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('text-gray-600', 'border-gray-200');
+          b.classList.remove('border-mint-200');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('text-gray-600', 'border-gray-200');
+        btn.classList.add('border-mint-200');
+
+        const filter = btn.dataset.filter;
+        let visibleCount = 0;
+
+        projectCards.forEach(card => {
+          const category = card.dataset.category;
+          if (filter === 'all' || category === filter) {
+            card.classList.remove('hidden');
+            card.classList.add('visible');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+            card.classList.remove('visible');
+          }
+        });
+
+        // Show/hide empty state
+        if (visibleCount === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

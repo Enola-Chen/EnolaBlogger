@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="聯絡 Ana Chen - 前端工程師、AIoT 探索者">
+  <meta name="theme-color" content="#10B981">
+  <title>聯絡我 | Ana Chen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mint: {
+              50: '#ECFDF5',
+              100: '#D1FAE5',
+              200: '#A7F3D0',
+              300: '#6EE7B7',
+              400: '#34D399',
+              500: '#10B981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065F46',
+              900: '#064E3B',
+            },
+            coral: '#FF8566',
+            warmYellow: '#FFD93D',
+            teal: '#0891B2',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            '2xl': '16px',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    html { scroll-behavior: smooth; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(5, 150, 105, 0.15); }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .gradient-bg { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #ECFDF5 100%); }
+    .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; }
+    
+    /* Form focus styles */
+    .form-input:focus {
+      outline: none;
+      border-color: #10B981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    /* Social icon hover */
+    .social-link {
+      transition: all 0.3s ease;
+    }
+    .social-link:hover {
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-800 bg-white">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-mint-100">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="text-xl font-bold text-mint-500">Ana.</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="projects.html" class="text-gray-600 hover:text-mint-500 transition">作品集</a>
+        <a href="blog.html" class="text-gray-600 hover:text-mint-500 transition">部落格</a>
+        <a href="index.html#skills" class="text-gray-600 hover:text-mint-500 transition">技能</a>
+        <a href="about.html" class="text-gray-600 hover:text-mint-500 transition">關於我</a>
+        <a href="contact.html" class="px-5 py-2 bg-mint-500 text-white rounded-full hover:bg-mint-600 transition">聯絡我</a>
+      </div>
+      <button class="md:hidden text-gray-600" id="menuBtn">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="hidden md:hidden bg-white border-t border-mint-100 px-6 py-4" id="mobileMenu">
+      <div class="flex flex-col gap-4">
+        <a href="projects.html" class="text-gray-600 hover:text-mint-500">作品集</a>
+        <a href="blog.html" class="text-gray-600 hover:text-mint-500">部落格</a>
+        <a href="index.html#skills" class="text-gray-600 hover:text-mint-500">技能</a>
+        <a href="about.html" class="text-gray-600 hover:text-mint-500">關於我</a>
+        <a href="contact.html" class="text-center px-5 py-2 bg-mint-500 text-white rounded-full">聯絡我</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-16 gradient-bg relative overflow-hidden">
+    <div class="blob w-80 h-80 bg-mint-300 -top-20 right-20"></div>
+    <div class="blob w-64 h-64 bg-warmYellow bottom-0 -left-10"></div>
+    
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <div class="text-center max-w-2xl mx-auto">
+        <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-6">
+          💬 保持聯繫
+        </span>
+        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          讓我們聊聊吧！
+        </h1>
+        <p class="text-xl text-gray-500 leading-relaxed">
+          無論是專案合作、技術討論、實習機會，<br class="hidden md:block">
+          或只是想打聲招呼，都歡迎與我聯繫！
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-5 gap-12">
+        
+        <!-- Contact Info -->
+        <div class="lg:col-span-2 space-y-8">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">聯絡方式</h2>
+            <p class="text-gray-500 mb-8">
+              我通常會在 24 小時內回覆訊息。如果是緊急事項，建議直接寄 Email 給我！
+            </p>
+          </div>
+
+          <!-- Contact Cards -->
+          <div class="space-y-4">
+            <!-- Email -->
+            <a href="mailto:chensofia0214@gmail.com" class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition group">
+              <div class="w-12 h-12 bg-mint-100 rounded-xl flex items-center justify-center group-hover:bg-mint-500 transition">
+                <svg class="w-6 h-6 text-mint-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">Email</div>
+                <div class="text-gray-500 text-sm">chensofia0214@gmail.com</div>
+              </div>
+            </a>
+
+            <!-- Location -->
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
+              <div class="w-12 h-12 bg-mint-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-mint-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">地點</div>
+                <div class="text-gray-500 text-sm">台灣 🇹🇼</div>
+              </div>
+            </div>
+
+            <!-- Response Time -->
+            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
+              <div class="w-12 h-12 bg-mint-100 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-mint-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-medium text-gray-900">回覆時間</div>
+                <div class="text-gray-500 text-sm">通常 24 小時內</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div>
+            <h3 class="font-bold text-gray-900 mb-4">也可以在這裡找到我</h3>
+            <div class="flex gap-4">
+              <!-- GitHub -->
+              <a href="https://github.com" target="_blank" class="social-link w-14 h-14 bg-gray-900 rounded-2xl flex items-center justify-center hover:bg-gray-800">
+                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+              
+              <!-- LinkedIn -->
+              <a href="https://linkedin.com" target="_blank" class="social-link w-14 h-14 bg-[#0A66C2] rounded-2xl flex items-center justify-center hover:bg-[#004182]">
+                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
+              
+              <!-- Medium -->
+              <a href="https://medium.com/@chensofia0214" target="_blank" class="social-link w-14 h-14 bg-black rounded-2xl flex items-center justify-center hover:bg-gray-800">
+                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+                </svg>
+              </a>
+              
+              <!-- Twitter/X -->
+              <a href="https://twitter.com" target="_blank" class="social-link w-14 h-14 bg-black rounded-2xl flex items-center justify-center hover:bg-gray-800">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Availability Status -->
+          <div class="p-6 bg-mint-50 rounded-2xl border border-mint-100">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="w-3 h-3 bg-mint-500 rounded-full animate-pulse"></span>
+              <span class="font-bold text-gray-900">目前狀態</span>
+            </div>
+            <p class="text-gray-600">
+              🎯 <span class="font-medium">開放實習機會</span><br>
+              <span class="text-sm text-gray-500">正在尋找前端開發相關的實習或合作機會</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="lg:col-span-3">
+          <div class="bg-gray-50 rounded-3xl p-8 md:p-10">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">傳送訊息</h2>
+            <p class="text-gray-500 mb-8">填寫以下表單，我會盡快回覆你！</p>
+            
+            <form id="contactForm" class="space-y-6">
+              <!-- Name & Email Row -->
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 mb-2">姓名 *</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required
+                    placeholder="你的名字"
+                    class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl transition"
+                  >
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required
+                    placeholder="your@email.com"
+                    class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl transition"
+                  >
+                </div>
+              </div>
+
+              <!-- Subject -->
+              <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">主旨</label>
+                <select 
+                  id="subject" 
+                  name="subject"
+                  class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl transition appearance-none cursor-pointer"
+                >
+                  <option value="">請選擇主旨</option>
+                  <option value="collaboration">💼 專案合作</option>
+                  <option value="internship">🎯 實習機會</option>
+                  <option value="technical">💻 技術討論</option>
+                  <option value="community">👥 社群相關</option>
+                  <option value="other">💬 其他</option>
+                </select>
+              </div>
+
+              <!-- Message -->
+              <div>
+                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">訊息內容 *</label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  rows="6"
+                  required
+                  placeholder="請告訴我你想聊什麼..."
+                  class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl transition resize-none"
+                ></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <button 
+                type="submit" 
+                class="w-full md:w-auto px-8 py-4 bg-mint-500 text-white rounded-full font-semibold hover:bg-mint-600 transition shadow-lg shadow-mint-500/30 flex items-center justify-center gap-2"
+              >
+                <span>送出訊息</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+              </button>
+            </form>
+
+            <!-- Success Message (hidden by default) -->
+            <div id="successMessage" class="hidden text-center py-12">
+              <div class="w-20 h-20 bg-mint-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-mint-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">訊息已送出！</h3>
+              <p class="text-gray-500 mb-6">感謝你的來信，我會盡快回覆你！</p>
+              <button 
+                onclick="resetForm()"
+                class="text-mint-500 font-medium hover:text-mint-600 transition"
+              >
+                ← 送出另一則訊息
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">常見問題</h2>
+        <p class="text-gray-500">一些你可能想知道的事</p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- FAQ 1 -->
+        <details class="bg-white rounded-2xl border border-gray-100 overflow-hidden group">
+          <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition">
+            <span class="font-medium text-gray-900">你目前開放什麼類型的合作？</span>
+            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-6 pb-6 text-gray-500">
+            我目前主要開放前端開發相關的實習機會、短期專案合作，以及技術交流。如果你有任何想法，都歡迎聯繫我討論！
+          </div>
+        </details>
+
+        <!-- FAQ 2 -->
+        <details class="bg-white rounded-2xl border border-gray-100 overflow-hidden group">
+          <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition">
+            <span class="font-medium text-gray-900">可以接受遠端工作嗎？</span>
+            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-6 pb-6 text-gray-500">
+            當然可以！我習慣使用 Notion、Discord、Slack 等工具協作，遠端或混合模式對我來說都沒問題。
+          </div>
+        </details>
+
+        <!-- FAQ 3 -->
+        <details class="bg-white rounded-2xl border border-gray-100 overflow-hidden group">
+          <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition">
+            <span class="font-medium text-gray-900">多久會回覆訊息？</span>
+            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-6 pb-6 text-gray-500">
+            我通常會在 24 小時內回覆 Email。如果是社群平台的私訊，可能會稍微慢一點，但我會盡量在 48 小時內回覆。
+          </div>
+        </details>
+
+        <!-- FAQ 4 -->
+        <details class="bg-white rounded-2xl border border-gray-100 overflow-hidden group">
+          <summary class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition">
+            <span class="font-medium text-gray-900">可以請教技術問題嗎？</span>
+            <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-6 pb-6 text-gray-500">
+            當然歡迎！雖然我還是學生，但如果是 Vue.js、Tailwind CSS 或前端相關的問題，我很樂意分享我的經驗和想法。
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="text-xl font-bold text-mint-400">Ana.</a>
+          <span class="text-gray-500">|</span>
+          <span class="text-gray-400 text-sm">前端工程師 & AIoT 探索者</span>
+        </div>
+        <div class="flex gap-4">
+          <a href="https://github.com" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="mailto:chensofia0214@gmail.com" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+        <p>© 2026 Ana Chen. 以 💚 打造</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Form submission
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Simulate form submission
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      submitBtn.innerHTML = '<span>送出中...</span>';
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        contactForm.classList.add('hidden');
+        successMessage.classList.remove('hidden');
+      }, 1500);
+    });
+
+    function resetForm() {
+      contactForm.reset();
+      contactForm.classList.remove('hidden');
+      successMessage.classList.add('hidden');
+      
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      submitBtn.innerHTML = `
+        <span>送出訊息</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+        </svg>
+      `;
+      submitBtn.disabled = false;
+    }
+  </script>
+
+</body>
+</html>

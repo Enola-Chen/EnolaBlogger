@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>寵物植栽｜專題展示</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'serif-zh': ['"Noto Serif TC"', 'serif'],
+            'sans-zh': ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
+            'inter': ['Inter', 'system-ui', 'sans-serif'],
+            'mincho': ['"Shippori Mincho"', '"Noto Serif TC"', 'serif']
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.9s ease-out',
+            'slide-up': 'slideUp 0.8s ease-out'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;700;800&display=swap');
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(36px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-[#fafaf8] font-serif-zh text-stone-800 antialiased">
+  <div id="app"></div>
+
+  <script type="text/x-template" id="app-template">
+    <div class="min-h-screen">
+      <nav
+        class="sticky top-0 z-50 border-b border-stone-200/90 bg-[#fafaf8]/95 backdrop-blur-md"
+        aria-label="本頁章節導覽"
+      >
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:px-10 lg:px-16">
+          <span class="font-mincho text-xs font-semibold tracking-wide text-stone-800 sm:text-sm">寵物植栽</span>
+          <div class="flex flex-wrap items-center justify-end gap-x-0.5 gap-y-1">
+            <a
+              href="#section-motivation"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >動機</a>
+            <a
+              href="#section-architecture"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >架構</a>
+            <a
+              href="#section-code-flow"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >程式碼實作流程</a>
+            <a
+              href="#section-model"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >模型表現</a>
+            <a
+              href="#section-challenges"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >實作難題</a>
+            <a
+              href="#section-ui"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >使用者介面</a>
+            <a
+              href="#section-source"
+              class="rounded-full px-3 py-1.5 font-sans-zh text-xs text-stone-600 transition-colors hover:bg-emerald-100/90 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 sm:text-sm"
+            >原始碼連結</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- 第一部分｜成果影片：置頂、靜音循環（瀏覽器多數需 muted 才允許 autoplay） -->
+      <div class="w-full px-6 pt-6 sm:px-10 lg:px-16">
+        <div class="mx-auto max-w-6xl">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">01｜成果影片</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <span class="font-sans-zh text-xs text-stone-500">審查資料用 · 送件前請補上實檔</span>
+          </div>
+          <div class="overflow-hidden rounded-2xl shadow-sm ring-1 ring-stone-900/5">
+            <div class="relative w-full">
+              <div>
+                <video
+                  class="w-full object-cover"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  aria-label="專題成果展示影片，循環靜音播放"
+                >
+                  <source src="./videos/plant-robot-showreel.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div class="absolute inset-0 flex items-end bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent p-5 sm:p-6 lg:p-8">
+                <div class="flex w-full flex-col gap-1">
+                  <h1 class="font-mincho text-3xl font-semibold tracking-[0.06em] text-white sm:text-4xl lg:text-5xl">寵物植栽</h1>
+                  <span class="font-sans-zh text-sm text-white/90">Smart Plant Monitoring · 草莓病害辨識與遠端監測</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 rounded-xl border border-dashed border-stone-300 bg-stone-100/80 px-4 py-3">
+            <div class="font-sans-zh text-sm leading-relaxed text-stone-600">
+              <span class="font-medium text-stone-800">影片佔位（請送件前自行補上）</span>
+              將橫式 16:9 成果剪輯匯出為 MP4，檔名建議
+              <span class="font-mono text-xs text-stone-700">videos/plant-robot-showreel.mp4</span>
+              （與本頁
+              <span class="font-mono text-xs">source</span>
+              路徑一致即可自動播放）／亦可用學位專題簡報或 demo 的精華 30 秒至 2 分鐘。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-auto flex max-w-6xl flex-col px-6 py-10 lg:px-16 lg:py-16">
+        <div class="mb-10 flex items-center justify-between border-b border-stone-200 pb-4">
+          <div class="flex items-center gap-3">
+            <span class="font-inter text-xs font-semibold uppercase tracking-[0.3em] text-stone-500">Project Intro</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="rounded-full bg-emerald-100 px-3 py-1 font-sans-zh text-xs font-medium text-emerald-700">植物科技</span>
+            <span class="rounded-full bg-stone-200 px-3 py-1 font-sans-zh text-xs font-medium text-stone-700">互動裝置</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center gap-10 lg:flex-row lg:gap-16">
+          <div class="flex w-full flex-col justify-center lg:w-1/2">
+            <div class="overflow-hidden rounded-2xl ring-1 ring-stone-900/5">
+              <img src="./images/plant/main.jpeg" alt="植物機器人主視覺" class="w-full object-cover">
+            </div>
+          </div>
+
+          <div class="flex w-full flex-col justify-center lg:w-1/2">
+            <div class="animate-fade-in">
+              <span class="font-sans-zh text-sm tracking-[0.2em] text-stone-500">畢業專題 / SPA 展示頁</span>
+            </div>
+            <div class="mt-6 animate-slide-up">
+              <h2 class="font-mincho text-4xl font-semibold leading-tight tracking-[0.08em] text-stone-900 lg:text-6xl">
+                專題說明
+              </h2>
+              <div class="mt-5 flex flex-col gap-3">
+                <span class="font-sans-zh text-base leading-relaxed text-stone-700">
+                  結合感測器、植物狀態資料與互動回饋，
+                  讓系統以即時監測與類寵物式回饋，降低高價值作物之照護門檻
+                </span>
+                <span class="font-sans-zh text-base leading-relaxed text-stone-700">
+                  本頁依序介紹動機、架構、程式碼實作流程、模型表現、實作難題、使用者介面與原始碼連結
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第二部分｜研究動機（與全頁其餘區塊同一欄寬、同頁連續呈現） -->
+        <div id="section-motivation" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">02｜研究動機</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-emerald-100 px-3 py-1 font-sans-zh text-xs font-medium text-emerald-700">IoT</span>
+              <span class="rounded-full bg-stone-200 px-3 py-1 font-sans-zh text-xs font-medium text-stone-700">邊緣 AI</span>
+              <span class="rounded-full bg-amber-100/90 px-3 py-1 font-sans-zh text-xs font-medium text-amber-800">療癒／互動</span>
+            </div>
+          </div>
+          <h2 class="mt-6 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">研究動機與目的</h2>
+          <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            以環境要求嚴苛的高價值<b class="font-medium text-stone-800">白草莓</b>為例，建構一套支援遠端照護與長期監測的系統，並透過互動表情，讓植物的需求可視化
+          </p>
+
+          <div class="mt-10 flex flex-col items-stretch gap-10 lg:flex-row lg:gap-14">
+            <div class="order-1 flex w-full flex-col justify-center lg:w-1/2">
+              <div class="flex min-h-56 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 px-6 py-8 ring-1 ring-stone-200/60 sm:min-h-64">
+                <div>
+                  <span class="font-inter text-sm font-medium tracking-wide text-stone-500">圖像佔位</span>
+                </div>
+                <div>
+                  <span class="text-center font-sans-zh text-sm leading-relaxed text-stone-600">
+                    請補一張圖：居家植栽或小型溫室中「照顧高價值作物卻易失敗」的情境照片／示意插畫
+                  </span>
+                </div>
+                <div>
+                  <span class="text-center font-sans-zh text-xs leading-relaxed text-stone-500">檔名建議：</span>
+                  <span class="font-mono text-xs text-stone-600">images/plant-robot/motivation-scene.png</span>
+                </div>
+              </div>
+            </div>
+            <div class="order-2 flex w-full flex-col justify-center gap-8 lg:w-1/2">
+              <div>
+                <h3 class="font-inter text-lg font-semibold text-stone-900">研究背景</h3>
+                <p class="mt-3 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                  近年來「寵物經濟」與「療癒商機」爆發，顯示現代人對於情感陪伴的需求日益增加。然而，在快節奏的生活中，許多人雖然渴望擁有寵物，卻常因時間破碎、居住空間受限等現實因素，無法承擔飼養實體寵物的長期責任。
+                </p>
+                <p class="mt-3 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                  另一方面，植物本身即具備極佳的療癒特性，但對於缺乏園藝經驗的使用者而言，特別是面對如「白草莓」這類對環境要求嚴苛的高經濟價值作物，往往因為無法及時察覺植物的健康變化，導致栽種失敗，反而帶來挫折感。因此，我們希望打造一款能帶來陪伴感、有互動性、卻不會增加生活負擔的新型態寵物。
+                </p>
+              </div>
+              <div>
+                <h3 class="font-inter text-lg font-semibold text-stone-900">本專題欲達成之目的</h3>
+                <ul class="mt-5 flex flex-col gap-8 pl-0 font-sans-zh text-sm leading-[1.85] text-stone-700 sm:text-base">
+                  <li class="flex gap-3">
+                    <div class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600"></div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-stone-900">降低栽種門檻｜智慧疾病偵測</div>
+                      <p class="mt-2">
+                        導入 EfficientNet-B0 分類模型，可辨識 7 種草莓常見病害。系統能主動判斷植物狀況，提供對應的改善建議，即使完全沒有園藝經驗的新手，也能輕鬆培養出健康植株
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3">
+                    <div class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600"></div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-stone-900">提升管理效率｜自動化調控</div>
+                      <p class="mt-2">
+                        透過邊緣運算整合環境感測數據，系統可自動執行澆水與光照調整。即使在忙碌的日常生活中，也能穩定維持良好的栽培環境，大幅降低照顧負擔
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3">
+                    <div class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600"></div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-stone-900">直覺化互動｜植物表情回饋</div>
+                      <p class="mt-2">
+                        將環境數據轉化為螢幕上的表情變化，讓使用者能快速理解植物當下狀態。植物不再只是靜態存在，而是具備情感回饋的互動陪伴
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3">
+                    <div class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600"></div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-stone-900">即時監控｜區域網路儀表板</div>
+                      <p class="mt-2">
+                        結合 Flask、WebSocket 與 Vue 3 建立即時監控介面。在同一網域環境下，可透過手機或電腦查看土壤濕度、光照、溫濕度與疾病偵測結果，並支援手動與自動操作，全面提升照護精準度
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex gap-3">
+                    <div class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-600"></div>
+                    <div class="min-w-0 flex-1">
+                      <div class="font-semibold text-stone-900">市場潛力｜結合療癒與科技應用</div>
+                      <p class="mt-2">
+                        呼應近年成長中的療癒與陪伴需求，將傳統植栽的照顧難題轉化為智慧解決方案，打造兼具實用性與情感價值的科技產品，具備高度商品化潛力
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第三部分｜設計架構（同頁、同欄寬延續） -->
+        <div id="section-architecture" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">03｜設計架構</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-sky-100 px-3 py-1 font-sans-zh text-xs font-medium text-sky-800">分層模組</span>
+              <span class="rounded-full bg-stone-200 px-3 py-1 font-sans-zh text-xs font-medium text-stone-700">邊緣推論</span>
+            </div>
+          </div>
+          <h2 class="mt-6 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">系統設計與架構</h2>
+          <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            以 <b class="font-medium text-stone-800">邊緣端即時性</b> 與 <b class="font-medium text-stone-800">前後端可擴充</b> 為原則，將硬體感測、AI 推論、後端服務與網頁介面分層，資料流以即時感測與遠端操作並行。
+          </p>
+          <div class="mt-10 overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 px-4 py-8 ring-1 ring-stone-200/60 sm:px-8 sm:py-10">
+            <div class="flex w-full items-center justify-center">
+              <img
+                src="./images/plant/structure.png"
+                alt="系統架構圖"
+                class="mx-auto h-auto max-h-[min(58vh,34rem)] max-w-full object-contain"
+              >
+            </div>
+          </div>
+
+          <p class="mt-6 max-w-3xl font-sans-zh text-sm font-medium text-stone-800 sm:text-base">整體資料與控制流</p>
+          <p class="mt-1 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            感測器讀取環境與土壌狀態 → 嵌入式與邊緣裝置彙整／推論 → 後端寫入與轉送 → 網頁與實體顯示同步更新；自動模式下依閾值與模型輸出下達致動，手動則以監看與人為下指令為主。
+          </p>
+
+          <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div class="flex flex-col rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-6">
+              <h3 class="font-inter text-base font-semibold text-stone-900">感測與控制</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700">
+                溫溼度、土壌濕度、光照等讀值；水泵、生長燈、風扇、繼電器與可選的本地 TFT／LCD 顯示，作為實體回饋與控制出口。
+              </p>
+            </div>
+            <div class="flex flex-col rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-6">
+              <h3 class="font-inter text-base font-semibold text-stone-900">邊緣運算與 AI 推論</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700">
+                以 <b class="font-medium text-stone-800">Jetson</b> 等邊緣平台負擔 <b class="font-medium text-stone-800">EfficientNet-B0</b> 影像分類，搭配攝影或 IP Webcam 取流，減少雲端傳輸、貼近即時回應。
+              </p>
+            </div>
+            <div class="flex flex-col rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-6">
+              <h3 class="font-inter text-base font-semibold text-stone-900">通訊與資料</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700">
+                <b class="font-medium text-stone-800">Flask</b> 後端、<b class="font-medium text-stone-800">WebSocket</b> 推播感測與狀態；REST 或等效 API 處理設定與歷程；<b class="font-medium text-stone-800">ESP32</b> 以 Wi-Fi／串列等與上層銜接（依實作為準）。
+              </p>
+            </div>
+            <div class="flex flex-col rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-6">
+              <h3 class="font-inter text-base font-semibold text-stone-900">使用者介面</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700">
+                <b class="font-medium text-stone-800">Vue 3</b> 與 <b class="font-medium text-stone-800">Tailwind</b> 建置儀表化介面，跨裝置顯示健康狀態、感測數值與自動／手動切換，與專題操作情境一致。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第四部分｜程式碼實作流程（訓練腳本 SOP） -->
+        <div id="section-code-flow" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">04｜程式碼實作流程</span>
+                <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+              </div>
+              <div class="flex max-w-md items-center gap-3">
+                <div class="h-px flex-1 rounded-full bg-gradient-to-r from-emerald-400 via-teal-300/80 to-transparent" aria-hidden="true"></div>
+                <span class="font-sans-zh text-xs text-stone-500">由環境設定走到報告輸出</span>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 px-3 py-1.5 font-sans-zh text-xs font-medium text-emerald-900 shadow-sm shadow-emerald-900/5 ring-1 ring-emerald-200/70">PyTorch</span>
+              <span class="rounded-full bg-gradient-to-r from-teal-50 to-cyan-50 px-3 py-1.5 font-sans-zh text-xs font-medium text-teal-900 shadow-sm shadow-teal-900/5 ring-1 ring-teal-200/70">時間線</span>
+            </div>
+          </div>
+          <h2 class="mt-8 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">訓練腳本執行流程（SOP）</h2>
+          <div class="mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 shadow-[0_0_20px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+          <p class="mt-5 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            這支訓練程式碼的核心邏輯，我把它拆解成以下幾個標準化步驟。以下以時間線依序列出開發細節與思路：
+          </p>
+
+          <div class="mt-10 overflow-hidden rounded-[1.65rem] border border-stone-200/90 bg-gradient-to-br from-white via-emerald-50/35 to-teal-50/45 p-1 shadow-[0_24px_60px_-28px_rgba(13,148,136,0.35)] ring-1 ring-emerald-950/[0.06] sm:rounded-[1.85rem] sm:p-1.5">
+            <div class="rounded-[1.4rem] bg-[#fafaf8]/80 px-5 py-8 backdrop-blur-[2px] sm:rounded-[1.65rem] sm:px-8 sm:py-10 lg:px-10 lg:py-11">            
+              <div class="flex flex-col">
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">01</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟一：基礎環境與參數設定</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          程式一開始先定義好資料放在哪、模型存在哪、每次訓練的「批次大小」、總共要跑幾次「訓練回合」（設定為五百次），以及學習率，並讓程式自動抓取圖形處理器（顯示卡）來加速運算。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">02</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟二：設定「焦點損失函數」對付不平衡資料</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                        其中有遇到一個問題，資料集中，我們健康的照片很多，但生病的照片很少。為了解決這個資料不平衡的致命傷，我沒有用預設的算法，而是改用「焦點損失函數」，強迫模型在訓練時，把注意力集中在那些數量少、容易猜錯的疾病上。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">03</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟三：自訂資料集與「少數類別動態補強」</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          除了讓程式自動讀取圖片並對應到正確的疾病標籤（例如健康是標籤四、葉斑病是標籤五），我還特別寫了一個補強機制，舉例來說，炭疽病的照片只有一百多張，程式只要抓到這種少數類別，就會自動對它做更多次的旋轉、裁切、亮度調整。這等於是在資料不足時，用「合成」的方式幫模型補習。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">04</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟四：訓練與測試的「影像預處理」差異化</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          訓練時，我會加入隨機裁切和隨機調亮度，故意讓圖片多樣化一點，強迫模型認特徵；但在驗證和測試時，只做基本的縮放和標準化，保持評估標準一致。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">05</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟五：建立資料載入器</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          把處理好的圖片分批送進模型。訓練集會設定「隨機打亂順序」避免模型死背題庫；測試集、驗證集則固定順序，這是一個很標準的資料管線做法。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">06</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟六：導入預訓練模型（遷移學習）</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          這次專題採用 ImageNet 預訓練的 EfficientNet-B0 作為基礎模型，保留其特徵提取能力，並替換原有分類層，使其符合草莓病害分類任務，並透過遷移學習進行後續訓練與優化。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-white via-emerald-50 to-teal-100 shadow-[0_8px_26px_-10px_rgba(16,185,129,0.65)] ring-[3px] ring-white sm:h-12 sm:w-12">
+                      <span class="font-inter text-xs font-bold tabular-nums text-emerald-950 sm:text-sm">07</span>
+                    </div>
+                    <div class="mt-3 flex w-[3px] flex-1 rounded-full bg-gradient-to-b from-emerald-400 via-teal-300/85 to-stone-300/75 shadow-[0_0_18px_rgba(52,211,153,0.35)]" aria-hidden="true"></div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col pb-9 sm:pb-11">
+                    <div class="group flex min-h-full flex-row overlow-hidden rounded-2xl bg-white/95 shadow-[0_14px_44px_-22px_rgba(15,118,110,0.28)] ring-1 ring-stone-200/85 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_52px_-18px_rgba(16,185,129,0.28)] hover:ring-emerald-300/55">
+                      <div class="w-1 shrink-0 bg-gradient-to-b from-emerald-400 via-teal-500 to-cyan-600 sm:w-1.5" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <h3 class="font-inter text-lg font-semibold text-stone-900">步驟七：核心訓練迴圈與防呆機制</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          這裡是整支程式的心臟，我設定了幾個優化機制：
+                        </p>
+                        <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">動態學習率</h4>
+                        <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          如果發現準確率卡住沒進步，程式就會自動把學習率減半，讓模型學得更細緻。
+                        </p>
+                        <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">提早交卷機制</h4>
+                        <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          為了怕模型死背答案（過度擬合），只要連續三十個回合準確率都沒進步，就會自動停止訓練，也就是「模型收斂就提早收工」。
+                        </p>
+                        <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">自動存檔</h4>
+                        <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          只要遇到準確率創新高，就會立刻存成最佳模型檔案，而且每十個回合也會固定備份一次。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-stretch gap-4 sm:gap-6">
+                  <div class="flex w-[3.25rem] shrink-0 flex-col items-center pt-1 sm:w-14">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 shadow-[0_14px_44px_-8px_rgba(13,148,136,0.82)] ring-[3px] ring-emerald-100 sm:h-[3.25rem] sm:w-[3.25rem]">
+                      <span class="font-inter text-sm font-bold tabular-nums text-white">08</span>
+                    </div>
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col">
+                    <div class="group flex min-h-full flex-row overflow-hidden rounded-2xl bg-gradient-to-br from-white via-emerald-50/40 to-teal-50/50 shadow-[0_18px_56px_-22px_rgba(5,150,105,0.45)] ring-2 ring-emerald-400/35 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-18px_rgba(13,148,136,0.4)]">
+                      <div class="w-1.5 shrink-0 bg-gradient-to-b from-emerald-500 via-teal-600 to-emerald-800 sm:w-2" aria-hidden="true"></div>
+                      <div class="flex flex-col px-5 py-5 sm:px-7 sm:py-6">
+                        <div class="flex flex-wrap items-center gap-2">
+                          <span class="rounded-full bg-emerald-600/10 px-2.5 py-0.5 font-inter text-[10px] font-bold uppercase tracking-[0.28em] text-emerald-900">Deliver</span>
+                          <span class="font-sans-zh text-xs text-stone-600">輸出報告與整體準確率</span>
+                        </div>
+                        <h3 class="mt-3 font-inter text-lg font-semibold text-stone-900">步驟八：測試與自動產出視覺化報告</h3>
+                        <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          訓練結束後，程式會自動讀取那顆表現最好的模型去跑測試集，並且自動生出三份報告：
+                        </p>
+                        <ul class="mt-3 list-disc space-y-2 pl-5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          <li><b class="font-medium text-stone-800">多維度分類報告：</b>詳細記錄每一種疾病的精準度、召回率和綜合分數，並存成資料檔供後續使用。</li>
+                          <li><b class="font-medium text-stone-800">混淆矩陣圖：</b>畫出一張熱力圖，讓我一眼就能看出模型最常把哪兩種病搞混。</li>
+                          <li><b class="font-medium text-stone-800">訓練曲線圖：</b>畫出誤差值、準確率和學習率的變化折線圖。</li>
+                        </ul>
+                        <p class="mt-4 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                          最後，程式會印出最終的「整體測試準確率」，這也就是我們專題報告上呈現的模型成績。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第五部分｜模型精準度（同頁、同欄寬；數值與圖表送件前自補） -->
+        <div id="section-model" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">05｜模型精準度</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-violet-100 px-3 py-1 font-sans-zh text-xs font-medium text-violet-800">EfficientNet-B0</span>
+              <span class="rounded-full bg-stone-200 px-3 py-1 font-sans-zh text-xs font-medium text-stone-700">遷移學習</span>
+            </div>
+          </div>
+          <h2 class="mt-6 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">模型訓練與效能</h2>
+          <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            專題以 <b class="font-medium text-stone-800">ImageNet 預訓練之 EfficientNet-B0</b> 做遷移學習，針對草莓葉部／果部影像做多類健康與病害分類。訓練階段搭配資料增強；若類別不衡，可採
+            <b class="font-medium text-stone-800">Focal Loss</b> 與權重等策略。以下圖表與分數
+            <b class="font-medium text-stone-800">請以送審紙本或附錄之測試結果為準</b>，此處先留佔位。
+          </p>
+
+          <div class="mt-8 flex flex-col gap-4 rounded-2xl border border-amber-200/80 bg-amber-50/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+            <div class="font-sans-zh text-sm text-stone-700">
+              <span class="font-medium text-stone-900">審讀用摘要（請填數字後再送件）</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 font-sans-zh text-sm text-stone-600">
+              <div class="flex items-baseline gap-1.5">
+                <span>測試集整體準確率</span>
+                <span class="rounded-md bg-white px-2 py-0.5 font-mono text-sm text-stone-500 ring-1 ring-stone-200">— ％</span>
+              </div>
+              <div class="hidden h-4 w-px bg-stone-300 sm:block" aria-hidden="true"></div>
+              <div class="flex items-baseline gap-1.5">
+                <span>加權 F1（若報告有列）</span>
+                <span class="rounded-md bg-white px-2 py-0.5 font-mono text-sm text-stone-500 ring-1 ring-stone-200">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-10 flex flex-col gap-10">
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">訓練／驗證趨勢</h3>
+              <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+                可對照報告圖 4-1 類圖，呈現 loss、accuracy 與學習率變化，說明收斂與是否過度擬合。
+              </p>
+              <div class="mt-4 overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 px-4 py-8 ring-1 ring-stone-200/60 sm:px-6">
+                <div class="flex w-full items-center justify-center">
+                  <img
+                    src="./images/plant/loss.jpg"
+                    alt="訓練／驗證趨勢"
+                    class="mx-auto h-auto max-h-[min(58vh,34rem)] max-w-full object-contain"
+                  >
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">測試集：混淆矩陣</h3>
+              <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+                觀察易混淆之病害類別，呼應報告圖 4-2 之分析。
+              </p>
+              <div class="mt-4 overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 px-4 py-8 ring-1 ring-stone-200/60 sm:px-6">
+                <div class="flex w-full items-center justify-center">
+                  <img
+                    src="./images/plant/confusion.jpg"
+                    alt="測試集：混淆矩陣"
+                    class="mx-auto h-auto max-h-[min(58vh,34rem)] max-w-full object-contain"
+                  >
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">各類別 Precision / Recall / F1</h3>
+              <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+                以長條圖或表格式呈現，利於審查比對少數類與難分類樣本（圖 4-3 同類）。類別總數與定義
+                <b class="font-medium text-stone-800">請與 GitHub／報告內之定稿相同</b>，避免 8 類與 10 類敘事並陳。
+              </p>
+              <div class="mt-4 overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 px-4 py-8 ring-1 ring-stone-200/60 sm:px-6">
+                <div class="flex w-full items-center justify-center">
+                  <img
+                    src="./images/plant/accuracy.jpg"
+                    alt="各類別 Precision／Recall／F1"
+                    class="mx-auto h-auto max-h-[min(58vh,34rem)] max-w-full object-contain"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第六部分｜實作挑戰與突破（同頁、同欄寬） -->
+        <div id="section-challenges" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">06｜實作挑戰</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-rose-100 px-3 py-1 font-sans-zh text-xs font-medium text-rose-800">技術權衡</span>
+              <span class="rounded-full bg-slate-200 px-3 py-1 font-sans-zh text-xs font-medium text-slate-800">全端整合</span>
+            </div>
+          </div>
+          <h2 class="mt-6 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">三大技術挑戰與突破</h2>
+          <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            專題從實驗室模型到可部署、可操作的系統，中間的落差以下列三則實例說明：如何依硬體與目標重選演算法、如何面對開源資料的落地落差，以及如何讓多節點軟硬體在時間軸上協同。
+          </p>
+
+          <div class="mt-10 flex flex-col gap-10">
+            <div class="rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-7">
+              <h3 class="font-inter text-lg font-semibold text-stone-900 sm:text-xl">挑戰一：演算法選型與邊緣運算效能</h3>
+              <div class="mt-3 flex flex-wrap items-center gap-2">
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#模型評估</span>
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#邊緣運算</span>
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#資源最佳化</span>
+              </div>
+              <h4 class="mt-5 font-sans-zh text-sm font-semibold text-stone-800">情境簡述</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                初期以 YOLOv8 做病斑偵測，但標註與疊框成本高，且偵測管線在 Jetson Xavier NX 上持續佔用算力，與本系統「以整體生長與健康狀態分類已足夠」的需求不完全對齊。
+              </p>
+              <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">解決方案</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                重述需求僅需判斷整體狀態、不需穩定座標框後，改採
+                <b class="font-medium text-stone-800">EfficientNet-B0</b>
+                做影像分類，兼顧推論延遲與模型參數量，讓邊緣裝置保留餘裕給取流、通訊與控制邏輯。
+              </p>
+              <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">展現價值</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                能依硬體預算與產品目標做
+                <b class="font-medium text-stone-800">技術權衡（Trade-off）</b>，
+                不將「能用的模型」誤當成「最合適的架構」。
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-7">
+              <h3 class="font-inter text-lg font-semibold text-stone-900 sm:text-xl">挑戰二：開源資料的落地限制與微觀偏差</h3>
+              <div class="mt-3 flex flex-wrap items-center gap-2">
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#資料集偏差</span>
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#Domain-Shift</span>
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#Data-Centric AI</span>
+              </div>
+              <h4 class="mt-5 font-sans-zh text-sm font-semibold text-stone-800">情境簡述</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                整合如 Kaggle 之開源、局部特寫影像時，實驗室指標容易偏高，卻面臨「實機鏡頭、整株／實驗溫室場域」的
+                <b class="font-medium text-stone-800">分佈差異與審查者質疑</b>。
+              </p>
+              <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">解決方案</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                從
+                <b class="font-medium text-stone-800">雜訊、色溫、構圖</b>
+                等條件檢討特徵是否被捷徑學習（Shortcut Learning）帶偏；在既有流程上，以
+                <b class="font-medium text-stone-800">資料增強、遷移學習</b> 收斂分佈，並預留以實機畫面微調的演進路徑，讓上線準確度可被談、可被驗證。
+              </p>
+              <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">展現價值</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                不盲信單一數值，能辨識
+                <b class="font-medium text-stone-800">實驗室與落地之鴻溝</b>，
+                並以資料與驗收方式補上缺口。
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-white/90 p-5 ring-1 ring-stone-200 sm:p-7">
+              <h3 class="font-inter text-lg font-semibold text-stone-900 sm:text-xl">挑戰三：軟硬體整合的即時通訊同步</h3>
+              <p class="mt-1 font-inter text-sm font-medium text-stone-500">System Integration</p>
+              <div class="mt-3 flex flex-wrap items-center gap-2">
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#前後端分離</span>
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#WebSocket</span>
+                <span class="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 font-sans-zh text-xs text-stone-600">#非同步處理</span>
+              </div>
+              <h4 class="mt-5 font-sans-zh text-sm font-semibold text-stone-800">情境簡述</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                串接 Jetson 端推論、Flask 服務、Vue 前端與嵌入式端讀值時，曾出現
+                <b class="font-medium text-stone-800">顯示延遲、感測與畫面狀態不同步</b>，
+                影響操作者判讀與遠端信任感。
+              </p>
+              <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">解決方案</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                以
+                <b class="font-medium text-stone-800">WebSocket（Flask-SocketIO）</b>
+                建立長連線、由後端以事件推送感測與推論摘要，減少輪詢；對高頻讀值做
+                <b class="font-medium text-stone-800">合併或節流</b>，
+                並在訊息內帶
+                <b class="font-medium text-stone-800">時間戳</b> 讓前後端以同一邏輯校時；重計算之推論與 I/O
+                以
+                <b class="font-medium text-stone-800">非同步佇列</b>
+                與執行緒分工，避免阻塞主服務。若最終實作與上述細節不同，可於口試中對照專題程式庫與實測日誌微調敘事。
+              </p>
+              <h4 class="mt-4 font-sans-zh text-sm font-semibold text-stone-800">展現價值</h4>
+              <p class="mt-1.5 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                能將模型包裝成
+                <b class="font-medium text-stone-800">可長時間運轉的完整系統</b>，
+                與只於 Notebook 跑實驗的層次區隔開來，並在審查中具體陳述「延遲從何而來、如何被管理」。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第七部分｜使用者介面（同頁、同欄寬；畫面截圖送件前自補） -->
+        <div id="section-ui" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">07｜使用者介面</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-teal-100 px-3 py-1 font-sans-zh text-xs font-medium text-teal-800">Vue 3</span>
+              <span class="rounded-full bg-stone-200 px-3 py-1 font-sans-zh text-xs font-medium text-stone-700">響應式</span>
+            </div>
+          </div>
+          <h2 class="mt-6 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">使用者介面與體驗</h2>
+          <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            前端以 <b class="font-medium text-stone-800">Vue 3</b> 與
+            <b class="font-medium text-stone-800">Tailwind CSS</b> 建置，搭配後端
+            <b class="font-medium text-stone-800">WebSocket</b> 即時推送感測與推論結果；版面以卡片模組排程，桌機、平板與手機皆可操作，呼應專題報告之 UI／UX 設計章節。
+          </p>
+
+          <div class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div class="flex flex-col">
+              <div class="flex min-h-48 flex-col overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 ring-1 ring-stone-200/60 sm:min-h-56">
+                <div class="flex min-h-48 w-full flex-1 items-center justify-center px-3 py-5 sm:min-h-56">
+                  <img src="./images/plant/ui-desktop.png" alt="電腦或平板介面" class="max-h-full w-full object-contain">
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <div class="flex h-96 min-h-48 flex-col overflow-hidden rounded-2xl border border-dashed border-stone-300 bg-stone-100/90 ring-1 ring-stone-200/60 sm:min-h-56">
+                <div class="flex min-h-0 w-full flex-1 items-center justify-center px-3 py-5">
+                  <img src="./images/plant/ui-mobile.png" alt="手機直式介面" class="max-h-full w-full object-contain">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-10 flex flex-col gap-8">
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">資訊架構與卡片式版面</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                依使用頻率與重要性區塊化：植物健康狀態、環境感測（光、土、溫溼度）、控制與模式、輔助資訊（如天氣）分區呈現，閱讀路徑由上而下、由核心到輔助。
+              </p>
+            </div>
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">健康狀態視覺化</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                以圓形環狀或同等等效設計，於主要視覺區顯示模型推論之健康或病害類別，並以色彩協助快速判讀；數值型感測則搭配單位與趨勢或儀表意象，降低純數字負擔。
+              </p>
+            </div>
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">自動與手動模式</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                介面提供模式切換：<b class="font-medium text-stone-800">自動</b>時由感測與推論結果驅動澆灌、光照等策略（依專題實作為準）；
+                <b class="font-medium text-stone-800">手動</b>時仍以監看與警示為主，由使用者下指令，兼顧「智慧輔助」與「人為把關」。
+              </p>
+            </div>
+            <div>
+              <h3 class="font-inter text-lg font-semibold text-stone-900">天氣與病害建議</h3>
+              <p class="mt-2 font-sans-zh text-sm leading-relaxed text-stone-700 sm:text-base">
+                可整合外部天氣資料作為照護參考；當模型或規則偵測異常時，以條列或簡短文案提供處置建議與時間脈絡，讓介面不只是讀數，而具指引性，利於審查時說明「人如何與系統協作」。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第八部分｜原始碼與開源連結（同頁、同欄寬） -->
+        <div id="section-source" class="mt-20 scroll-mt-24 border-t border-stone-200 pt-16 pb-16">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-inter text-xs font-semibold uppercase tracking-[0.28em] text-emerald-800/90">08｜開源與程式</span>
+              <div class="hidden h-4 w-px bg-gradient-to-b from-transparent via-emerald-300/70 to-transparent sm:block" aria-hidden="true"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="rounded-full bg-stone-200 px-3 py-1 font-sans-zh text-xs font-medium text-stone-700">GitHub</span>
+              <span class="rounded-full bg-emerald-100 px-3 py-1 font-sans-zh text-xs font-medium text-emerald-800">README 已附安裝說明</span>
+            </div>
+          </div>
+          <h2 class="mt-6 font-mincho text-3xl font-semibold tracking-[0.06em] text-stone-900 sm:text-4xl">原始碼與專題連結</h2>
+          <p class="mt-2 max-w-3xl font-sans-zh text-sm leading-relaxed text-stone-600 sm:text-base">
+            專題已公開於 GitHub，內容包含 AI 推論腳本、Flask 後端、Vue 前端專與權重檔等。審查或複現時，建議從
+            <b class="font-medium text-stone-800">README</b> 的安裝步驟與專題結構讀起；授權聲明以儲庫內條款為準（多為
+            <b class="font-medium text-stone-800">學習與研究用途</b>）。
+          </p>
+
+          <div class="mt-8 rounded-2xl bg-stone-100/90 p-5 ring-1 ring-stone-200 sm:p-6">
+            <h3 class="font-inter text-base font-semibold text-stone-900 sm:text-lg">儲庫重點路徑（依 README 整理）</h3>
+            <ul class="mt-4 flex flex-col gap-2 font-mono text-xs text-stone-700 sm:text-sm">
+              <li class="flex flex-wrap items-baseline gap-2">
+                <span class="shrink-0 text-stone-500">·</span>
+                <span>ai/ — 感測讀取、疾病辨識主程式等</span>
+              </li>
+              <li class="flex flex-wrap items-baseline gap-2">
+                <span class="shrink-0 text-stone-500">·</span>
+                <span>flask_app/plant_monitor/ — Flask 應用、模板與依賴</span>
+              </li>
+              <li class="flex flex-wrap items-baseline gap-2">
+                <span class="shrink-0 text-stone-500">·</span>
+                <span>frontend/frontend/… — Vue 3 + Vite 前端專題</span>
+              </li>
+              <li class="flex flex-wrap items-baseline gap-2">
+                <span class="shrink-0 text-stone-500">·</span>
+                <span>model/ — 分類權重（如 classify.pth）</span>
+              </li>
+            </ul>
+            <div class="mt-4 break-all font-sans-zh text-xs text-stone-500">
+              完整網址：
+              <a
+                href="https://github.com/Enola-Chen/Strawberry-disease-classification"
+                class="text-emerald-800 underline decoration-emerald-800/30 underline-offset-2 transition hover:text-emerald-900 hover:decoration-emerald-900/50"
+                target="_blank"
+                rel="noopener noreferrer"
+              >https://github.com/Enola-Chen/Strawberry-disease-classification</a>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-col items-stretch overflow-hidden rounded-2xl bg-[#0D0D0D] sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-2">
+            <div class="flex flex-1 flex-col justify-center gap-1 px-6 py-7 sm:py-8 sm:pl-8">
+              <div>
+                <span class="font-sans-zh text-sm text-[#F8F6F1]/90">在 GitHub 檢視程式與安裝方式</span>
+              </div>
+              <div>
+                <span class="font-sans-zh text-xs text-[#F8F6F1]/55">新分頁開啟</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-center border-t border-white/10 px-6 py-5 sm:border-t-0 sm:border-l sm:py-8 sm:pr-8">
+              <a
+                href="https://github.com/Enola-Chen/Strawberry-disease-classification"
+                class="inline-flex h-12 min-w-12 items-center justify-center gap-2 rounded-full border border-[#B89A67] px-6 font-sans-zh text-sm font-medium text-[#B89A67] transition duration-300 hover:border-[#D4B978] hover:text-[#D4B978] hover:shadow-[0_0_24px_rgba(184,154,103,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B89A67]"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>前往儲庫</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor" class="h-4 w-4" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      template: document.getElementById('app-template').innerHTML
+    }).mount('#app');
+  </script>
+</body>
+</html>

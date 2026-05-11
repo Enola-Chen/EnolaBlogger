@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="關於 Ana Chen - 19 歲資工系學生、前端工程師、AIoT 探索者">
+  <meta name="theme-color" content="#10B981">
+  <title>關於我 | Ana Chen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mint: {
+              50: '#ECFDF5',
+              100: '#D1FAE5',
+              200: '#A7F3D0',
+              300: '#6EE7B7',
+              400: '#34D399',
+              500: '#10B981',
+              600: '#059669',
+              700: '#065F46',
+              800: '#064E3B',
+              900: '#022C22',
+            },
+            coral: '#FF8566',
+            warmYellow: '#FFD93D',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            '2xl': '16px',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    html { scroll-behavior: smooth; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(16, 185, 129, 0.1); }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .gradient-bg { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 50%, #ECFDF5 100%); }
+    .blob { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; }
+    
+    /* Timeline styles */
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, #3DDC97, #dcfce9);
+    }
+    @media (max-width: 768px) {
+      .timeline-line {
+        left: 20px;
+      }
+    }
+    
+    /* Trait bar animation */
+    .trait-bar {
+      transition: width 1s ease-out;
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-800 bg-white">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-mint-100">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="text-xl font-bold text-mint-500">Ana.</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="projects.html" class="text-gray-600 hover:text-mint-500 transition">作品集</a>
+        <a href="blog.html" class="text-gray-600 hover:text-mint-500 transition">部落格</a>
+        <a href="index.html#skills" class="text-gray-600 hover:text-mint-500 transition">技能</a>
+        <a href="about.html" class="text-mint-500 font-medium">關於我</a>
+        <a href="contact.html" class="px-5 py-2 bg-mint-500 text-white rounded-full hover:bg-mint-600 transition">聯絡我</a>
+      </div>
+      <button class="md:hidden text-gray-600" id="menuBtn">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="hidden md:hidden bg-white border-t border-mint-100 px-6 py-4" id="mobileMenu">
+      <div class="flex flex-col gap-4">
+        <a href="projects.html" class="text-gray-600 hover:text-mint-500">作品集</a>
+        <a href="blog.html" class="text-gray-600 hover:text-mint-500">部落格</a>
+        <a href="index.html#skills" class="text-gray-600 hover:text-mint-500">技能</a>
+        <a href="about.html" class="text-mint-500 font-medium">關於我</a>
+        <a href="contact.html" class="text-center px-5 py-2 bg-mint-500 text-white rounded-full">聯絡我</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 gradient-bg relative overflow-hidden">
+    <div class="blob w-80 h-80 bg-mint-300 -top-20 -right-20"></div>
+    <div class="blob w-64 h-64 bg-warmYellow bottom-0 left-10"></div>
+    
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Photo -->
+        <div class="order-2 md:order-1">
+          <div class="relative">
+            <div class="aspect-square max-w-md mx-auto bg-gradient-to-br from-mint-200 to-mint-300 rounded-3xl overflow-hidden shadow-2xl">
+              <div class="w-full h-full flex items-center justify-center bg-mint-100">
+                <span class="text-9xl">👩‍💻</span>
+              </div>
+            </div>
+            <!-- Floating badges -->
+            <div class="absolute -top-4 -right-4 px-4 py-2 bg-white rounded-full shadow-lg">
+              <span class="text-sm font-medium">🎨 UI/UX</span>
+            </div>
+            <div class="absolute -bottom-4 -left-4 px-4 py-2 bg-white rounded-full shadow-lg">
+              <span class="text-sm font-medium">💻 Frontend</span>
+            </div>
+            <div class="absolute top-1/2 -right-8 px-4 py-2 bg-white rounded-full shadow-lg hidden md:block">
+              <span class="text-sm font-medium">🤖 AIoT</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Intro -->
+        <div class="order-1 md:order-2">
+          <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-6">
+            👋 關於我
+          </span>
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            嗨，我是 Ana Chen
+          </h1>
+          <p class="text-xl text-gray-600 mb-6 leading-relaxed">
+            19 歲的資訊工程系學生，熱愛<span class="text-mint-500 font-semibold">前端開發</span>與<span class="text-mint-500 font-semibold">使用者體驗設計</span>。
+          </p>
+          <p class="text-gray-500 mb-8 leading-relaxed">
+            我相信好的產品不只是功能的堆疊，更是對使用者需求的深刻理解。從寫程式到經營社群，我始終以「創造有意義的體驗」為目標，持續探索技術與人文的交會點。
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#journey" class="inline-flex items-center px-6 py-3 bg-mint-500 text-white rounded-full font-medium hover:bg-mint-600 transition">
+              我的旅程
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+              </svg>
+            </a>
+            <a href="contact.html" class="inline-flex items-center px-6 py-3 border-2 border-mint-500 text-mint-600 rounded-full font-medium hover:bg-mint-50 transition">
+              與我聯繫
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl font-bold text-mint-500 mb-2">3+</div>
+          <div class="text-gray-500">年程式經驗</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl font-bold text-mint-500 mb-2">15+</div>
+          <div class="text-gray-500">完成專案</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl font-bold text-mint-500 mb-2">500+</div>
+          <div class="text-gray-500">社群成員</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl font-bold text-mint-500 mb-2">∞</div>
+          <div class="text-gray-500">學習熱情</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journey Timeline -->
+  <section id="journey" class="py-24 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-4">成長旅程</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">我的故事</h2>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">從對程式一無所知，到成為熱愛創造的開發者</p>
+      </div>
+
+      <div class="relative">
+        <!-- Timeline line -->
+        <div class="timeline-line hidden md:block"></div>
+
+        <!-- Timeline items -->
+        <div class="space-y-12">
+          
+          <!-- 2023 -->
+          <div class="relative flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <span class="text-mint-500 font-bold text-lg">2023</span>
+                <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">程式啟蒙</h3>
+                <p class="text-gray-500">
+                  高二時第一次接觸 HTML/CSS，被「寫幾行程式碼就能創造出網頁」的魔力深深吸引。從此開啟了我的程式之旅。
+                </p>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-mint-500 rounded-full flex items-center justify-center text-white font-bold z-10 order-1 md:order-2 shrink-0">
+              🌱
+            </div>
+            <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
+          </div>
+
+          <!-- 2024 早期 -->
+          <div class="relative flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2 md:pr-12 order-2 hidden md:block"></div>
+            <div class="w-12 h-12 bg-mint-500 rounded-full flex items-center justify-center text-white font-bold z-10 order-1 shrink-0">
+              🚀
+            </div>
+            <div class="md:w-1/2 md:pl-12 md:text-left order-2 md:order-3">
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <span class="text-mint-500 font-bold text-lg">2024 上半年</span>
+                <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">深入前端世界</h3>
+                <p class="text-gray-500">
+                  進入大學資工系，系統性學習 JavaScript、Vue.js。完成第一個完整的 Web 應用，體會到「解決問題」的成就感。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2024 中期 -->
+          <div class="relative flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <span class="text-mint-500 font-bold text-lg">2024 下半年</span>
+                <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">AIoT 探索</h3>
+                <p class="text-gray-500">
+                  參與學校 AIoT 專題，接觸 Jetson Nano、ESP32 等硬體。發現軟硬整合的樂趣，完成智慧植栽監測系統。
+                </p>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-mint-500 rounded-full flex items-center justify-center text-white font-bold z-10 order-1 md:order-2 shrink-0">
+              🤖
+            </div>
+            <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
+          </div>
+
+          <!-- 2025 -->
+          <div class="relative flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2 md:pr-12 order-2 hidden md:block"></div>
+            <div class="w-12 h-12 bg-mint-500 rounded-full flex items-center justify-center text-white font-bold z-10 order-1 shrink-0">
+              💬
+            </div>
+            <div class="md:w-1/2 md:pl-12 md:text-left order-2 md:order-3">
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <span class="text-mint-500 font-bold text-lg">2025</span>
+                <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">創辦 LINE 社群</h3>
+                <p class="text-gray-500">
+                  將技術與社群經營結合，創辦並管理一個 500+ 人的 LINE 社群。學會系統思維、使用者體驗設計與團隊協作。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2026 -->
+          <div class="relative flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2 md:pr-12 md:text-right order-2 md:order-1">
+              <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <span class="text-mint-500 font-bold text-lg">2026 - 現在</span>
+                <h3 class="text-xl font-bold text-gray-900 mt-2 mb-3">持續成長中</h3>
+                <p class="text-gray-500">
+                  專注於前端開發深度學習，探索 UI/UX 設計思維。同時積極尋找實習機會，準備踏入職場的第一步。
+                </p>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-gradient-to-r from-mint-400 to-mint-600 rounded-full flex items-center justify-center text-white font-bold z-10 order-1 md:order-2 shrink-0 ring-4 ring-mint-100">
+              ✨
+            </div>
+            <div class="md:w-1/2 md:pl-12 order-3 hidden md:block"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy Section -->
+  <section class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-4">設計哲學</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">我相信的事</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Philosophy 1 -->
+        <div class="bg-gradient-to-br from-mint-50 to-white p-8 rounded-2xl border border-mint-100">
+          <div class="w-16 h-16 bg-mint-500 rounded-2xl flex items-center justify-center mb-6">
+            <span class="text-3xl">👤</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">使用者優先</h3>
+          <p class="text-gray-500 leading-relaxed">
+            技術是手段，不是目的。好的產品應該讓使用者感到舒適、直覺，而不是炫技。我始終從「使用者需要什麼」出發思考設計。
+          </p>
+        </div>
+
+        <!-- Philosophy 2 -->
+        <div class="bg-gradient-to-br from-mint-50 to-white p-8 rounded-2xl border border-mint-100">
+          <div class="w-16 h-16 bg-mint-500 rounded-2xl flex items-center justify-center mb-6">
+            <span class="text-3xl">🔄</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">持續迭代</h3>
+          <p class="text-gray-500 leading-relaxed">
+            沒有完美的第一版，只有不斷改進的過程。我享受從回饋中學習、快速迭代的節奏，每次都比上次做得更好。
+          </p>
+        </div>
+
+        <!-- Philosophy 3 -->
+        <div class="bg-gradient-to-br from-mint-50 to-white p-8 rounded-2xl border border-mint-100">
+          <div class="w-16 h-16 bg-mint-500 rounded-2xl flex items-center justify-center mb-6">
+            <span class="text-3xl">🌱</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">保持好奇</h3>
+          <p class="text-gray-500 leading-relaxed">
+            科技日新月異，保持學習的熱情是最重要的能力。我樂於探索新技術、嘗試新工具，並將所學應用到實際專案中。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Personality Traits -->
+  <section class="py-24 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-6">個人特質</span>
+          <h2 class="text-4xl font-bold text-gray-900 mb-6">我是什麼樣的人？</h2>
+          <p class="text-gray-500 mb-8 leading-relaxed">
+            除了技術能力，這些特質也是我的一部分。我相信軟實力與硬實力同樣重要，它們讓我成為更好的團隊夥伴。
+          </p>
+          
+          <!-- Trait bars -->
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-medium text-gray-700">🎯 執行力</span>
+                <span class="text-mint-500 font-medium">95%</span>
+              </div>
+              <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div class="trait-bar h-full bg-gradient-to-r from-mint-400 to-mint-500 rounded-full" style="width: 95%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-medium text-gray-700">💡 創意思維</span>
+                <span class="text-mint-500 font-medium">88%</span>
+              </div>
+              <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div class="trait-bar h-full bg-gradient-to-r from-mint-400 to-mint-500 rounded-full" style="width: 88%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-medium text-gray-700">🤝 團隊協作</span>
+                <span class="text-mint-500 font-medium">92%</span>
+              </div>
+              <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div class="trait-bar h-full bg-gradient-to-r from-mint-400 to-mint-500 rounded-full" style="width: 92%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-medium text-gray-700">📚 學習能力</span>
+                <span class="text-mint-500 font-medium">96%</span>
+              </div>
+              <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div class="trait-bar h-full bg-gradient-to-r from-mint-400 to-mint-500 rounded-full" style="width: 96%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="font-medium text-gray-700">🎨 美感敏銳度</span>
+                <span class="text-mint-500 font-medium">85%</span>
+              </div>
+              <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div class="trait-bar h-full bg-gradient-to-r from-mint-400 to-mint-500 rounded-full" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fun facts -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+            <span class="text-4xl mb-4 block">☕</span>
+            <h4 class="font-bold text-gray-900 mb-2">咖啡愛好者</h4>
+            <p class="text-sm text-gray-500">每天一杯拿鐵是標配</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+            <span class="text-4xl mb-4 block">🎵</span>
+            <h4 class="font-bold text-gray-900 mb-2">Lo-fi 工作配樂</h4>
+            <p class="text-sm text-gray-500">寫 Code 時的最佳夥伴</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+            <span class="text-4xl mb-4 block">🌙</span>
+            <h4 class="font-bold text-gray-900 mb-2">夜貓子</h4>
+            <p class="text-sm text-gray-500">深夜是靈感爆發時刻</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+            <span class="text-4xl mb-4 block">📖</span>
+            <h4 class="font-bold text-gray-900 mb-2">設計書迷</h4>
+            <p class="text-sm text-gray-500">最愛看 UX 相關書籍</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover col-span-2">
+            <span class="text-4xl mb-4 block">🎮</span>
+            <h4 class="font-bold text-gray-900 mb-2">休閒時光</h4>
+            <p class="text-sm text-gray-500">喜歡玩 Switch、看動漫、逛設計網站找靈感</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools I Use -->
+  <section class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-2 bg-mint-100 text-mint-600 rounded-full text-sm font-medium mb-4">工具箱</span>
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">我常用的工具</h2>
+      </div>
+
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-6">
+        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition">
+          <span class="text-4xl mb-2">⚡</span>
+          <span class="text-sm text-gray-600">VS Code</span>
+        </div>
+        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition">
+          <span class="text-4xl mb-2">🎨</span>
+          <span class="text-sm text-gray-600">Figma</span>
+        </div>
+        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition">
+          <span class="text-4xl mb-2">🐙</span>
+          <span class="text-sm text-gray-600">GitHub</span>
+        </div>
+        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition">
+          <span class="text-4xl mb-2">📝</span>
+          <span class="text-sm text-gray-600">Notion</span>
+        </div>
+        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition">
+          <span class="text-4xl mb-2">💬</span>
+          <span class="text-sm text-gray-600">Discord</span>
+        </div>
+        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-mint-50 transition">
+          <span class="text-4xl mb-2">🤖</span>
+          <span class="text-sm text-gray-600">ChatGPT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 gradient-bg relative overflow-hidden">
+    <div class="blob w-96 h-96 bg-mint-300 -top-20 -right-20"></div>
+    <div class="blob w-64 h-64 bg-warmYellow bottom-0 left-10"></div>
+    
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        想更認識我嗎？
+      </h2>
+      <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        歡迎查看我的作品，或直接與我聯繫聊聊！
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="projects.html" class="inline-flex items-center justify-center px-8 py-4 bg-mint-500 text-white rounded-full font-semibold hover:bg-mint-600 transition shadow-lg shadow-mint-500/30">
+          查看作品集
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a href="contact.html" class="inline-flex items-center justify-center px-8 py-4 border-2 border-mint-500 text-mint-600 rounded-full font-semibold hover:bg-white transition">
+          聯絡我
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="text-xl font-bold text-mint-400">Ana.</a>
+          <span class="text-gray-500">|</span>
+          <span class="text-gray-400 text-sm">前端工程師 & AIoT 探索者</span>
+        </div>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="mailto:hello@ana.dev" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-mint-500 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+        <p>© 2026 Ana Chen. 以 💚 打造</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom CTA -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-40">
+    <a href="contact.html" class="block w-full py-3 bg-mint-500 text-white text-center rounded-full font-semibold">
+      聯絡我
+    </a>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Animate trait bars on scroll
+    const traitBars = document.querySelectorAll('.trait-bar');
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.width = entry.target.style.width;
+        }
+      });
+    }, observerOptions);
+
+    traitBars.forEach(bar => observer.observe(bar));
+  </script>
+
+</body>
+</html>

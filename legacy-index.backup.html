@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ana Chen - 前端工程師 & AIoT 探索者的個人作品集">
+  <meta name="theme-color" content="#10B981">
+  <title>Ana Chen | 前端工程師 & AIoT 探索者</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mint: {
+              50: '#ECFDF5',
+              100: '#D1FAE5',
+              200: '#A7F3D0',
+              300: '#6EE7B7',
+              400: '#34D399',
+              500: '#10B981',
+              600: '#059669',
+              700: '#065F46',
+              800: '#064E3B',
+              900: '#022C22',
+            },
+            cream: '#FFF9E6',
+            warmYellow: '#FFF3D4',
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { 
+      background: linear-gradient(120deg, #FFF3D4 0%, #FFF9E6 25%, #FFFDF7 50%, #ECFDF5 75%, #D1FAE5 100%);
+      background-attachment: fixed;
+    }
+    
+    /* 滑鼠追蹤光暈 */
+    .spotlight {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: radial-gradient(600px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(16, 185, 129, 0.08), transparent 80%);
+      transition: background 0.3s ease;
+    }
+    
+    /* 導航項目 */
+    .nav-indicator {
+      width: 32px;
+      height: 2px;
+      background: #A7F3D0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover .nav-indicator,
+    .nav-link.active .nav-indicator {
+      width: 64px;
+      background: #10B981;
+    }
+    .nav-link:hover .nav-text,
+    .nav-link.active .nav-text {
+      color: #10B981;
+    }
+    
+    /* 專案卡片 */
+    .project-card {
+      transition: all 0.3s ease;
+      border-radius: 16px;
+    }
+    .project-card:hover {
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);
+    }
+    .project-card:hover .project-title {
+      color: #10B981;
+    }
+    .project-card:hover .project-arrow {
+      transform: translate(4px, -4px);
+    }
+    .project-card:hover .project-image {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+    }
+    
+    /* 經歷卡片 */
+    .exp-card {
+      transition: all 0.3s ease;
+      border-radius: 16px;
+    }
+    .exp-card:hover {
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.1);
+    }
+    .exp-card:hover .exp-title {
+      color: #10B981;
+    }
+    
+    /* 標籤 */
+    .tag {
+      background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+      color: #065F46;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+    .tag:hover {
+      background: linear-gradient(135deg, #A7F3D0, #6EE7B7);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+    
+    /* 社群連結 */
+    .social-link {
+      color: #6B7280;
+      transition: all 0.3s ease;
+    }
+    .social-link:hover {
+      color: #10B981;
+      transform: translateY(-3px);
+    }
+    
+    /* 連結樣式 */
+    .link-hover {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #10B981;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    .link-hover:hover {
+      color: #059669;
+    }
+    .link-hover::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #10B981;
+      transition: width 0.3s ease;
+    }
+    .link-hover:hover::after {
+      width: 100%;
+    }
+    
+    /* 區塊淡入 */
+    .section-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    .section-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 滾動條樣式 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #ECFDF5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #A7F3D0;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #10B981;
+    }
+    
+    /* 浮動裝飾 */
+    .floating-shape {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      pointer-events: none;
+      animation: floatShape 20s ease-in-out infinite;
+    }
+    @keyframes floatShape {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(30px, -30px); }
+      50% { transform: translate(-20px, 20px); }
+      75% { transform: translate(20px, 10px); }
+    }
+    
+    /* 文字高亮 */
+    .text-highlight {
+      color: #059669;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="font-sans leading-relaxed antialiased text-gray-700 selection:bg-mint-300/50 selection:text-mint-900">
+
+  <!-- 滑鼠追蹤光暈 -->
+  <div class="spotlight"></div>
+  
+  <!-- 浮動裝飾形狀 -->
+  <div class="floating-shape w-96 h-96 bg-mint-200 -top-20 -right-40" style="animation-delay: 0s;"></div>
+  <div class="floating-shape w-80 h-80 bg-amber-100 top-1/4 -left-32" style="animation-delay: 5s;"></div>
+  <div class="floating-shape w-72 h-72 bg-yellow-40 top-2/3 left-10" style="animation-delay: 8s;"></div>
+  <div class="floating-shape w-64 h-64 bg-mint-100 bottom-20 right-1/4" style="animation-delay: 10s;"></div>
+
+  <div class="relative z-10 mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-20 lg:px-24 lg:py-0">
+    <div class="lg:flex lg:justify-between lg:gap-4">
+      
+      <!-- 左側固定區域 -->
+      <header class="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24 lg:pr-12">
+        <div>
+          <!-- 名字與標題 -->
+          <div>
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+              <a href="/" class="hover:text-mint-600 transition-colors">Ana Chen</a>
+            </h1>
+            <h2 class="mt-3 text-lg font-medium tracking-tight text-mint-600 sm:text-xl">
+              前端工程師 & AIoT 探索者
+            </h2>
+            <p class="mt-4 max-w-xs leading-normal text-gray-500">
+              19 歲資工系學生，熱愛創造美觀且實用的網頁體驗，探索 AI 與 IoT 交織的未來科技世界。
+            </p>
+          </div>
+          
+          <!-- 導航 -->
+          <nav class="nav hidden lg:block mt-16" aria-label="頁面內導航">
+            <ul class="w-max">
+              <li>
+                <a class="nav-link group flex items-center py-3 active" href="#about">
+                  <span class="nav-indicator mr-4"></span>
+                  <span class="nav-text text-xs font-bold uppercase tracking-widest text-gray-500 group-hover:text-mint-600">關於我</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link group flex items-center py-3" href="#experience">
+                  <span class="nav-indicator mr-4"></span>
+                  <span class="nav-text text-xs font-bold uppercase tracking-widest text-gray-500 group-hover:text-mint-600">經歷</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link group flex items-center py-3" href="#projects">
+                  <span class="nav-indicator mr-4"></span>
+                  <span class="nav-text text-xs font-bold uppercase tracking-widest text-gray-500 group-hover:text-mint-600">作品集</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        
+        <!-- 社群連結 -->
+        <ul class="ml-1 mt-8 flex items-center gap-5" aria-label="社群連結">
+          <li>
+            <a class="social-link block" href="https://github.com" target="_blank" rel="noreferrer noopener" aria-label="GitHub">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-6 w-6">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a class="social-link block" href="https://medium.com" target="_blank" rel="noreferrer noopener" aria-label="Medium">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+                <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a class="social-link block" href="mailto:chensofia0214@gmail.com" aria-label="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </header>
+
+      <!-- 右側滾動內容 -->
+      <main id="content" class="pt-24 lg:w-1/2 lg:py-24">
+        
+        <!-- 關於我 -->
+        <section id="about" class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24 section-fade" aria-label="關於我">
+          <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-mint-50/90 px-6 py-5 backdrop-blur-md md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-mint-700 lg:sr-only">關於我</h2>
+          </div>
+          <div class="text-gray-600">
+            <p class="mb-4">
+              嗨！我是 Ana，一個熱愛技術與設計的 19 歲<span class="text-highlight">資訊工程系學生</span>。
+              我專注於打造<span class="text-highlight">美觀、直覺且易用</span>的網頁體驗，
+              同時也在探索 AI 與 IoT 結合的無限可能。
+            </p>
+            <p class="mb-4">
+              我的主要專長是<span class="text-highlight">前端開發</span>，熟悉 Vue.js、Tailwind CSS 等現代框架。
+              同時，我也有豐富的<span class="text-highlight"> AIoT 專案經驗</span>，
+              曾使用 Jetson Nano 開發智慧監測系統，將感測器數據視覺化呈現。
+            </p>
+            <p class="mb-4">
+              除了技術，我也是一個<span class="text-highlight">社群創辦人</span>，
+              經營 LINE 社群，設計會員系統與互動機制，
+              以系統思維打造活躍的社群生態。
+            </p>
+            <p>
+              閒暇時，我喜歡探索新技術、閱讀技術文章，
+              或是設計一些有趣的 Side Project。
+              歡迎隨時與我<a href="mailto:chensofia0214@gmail.com" class="link-hover">聯繫</a>！
+            </p>
+          </div>
+        </section>
+
+        <!-- 經歷 -->
+        <section id="experience" class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24 section-fade" aria-label="經歷">
+          <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-mint-50/90 px-6 py-5 backdrop-blur-md md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-mint-700 lg:sr-only">經歷</h2>
+          </div>
+          <div>
+            <ol class="group/list">
+              
+              <!-- 經歷 1 -->
+              <li class="mb-12">
+                <div class="exp-card group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 p-4 -mx-4">
+                  <header class="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-mint-600 sm:col-span-2">
+                    2024 — 現在
+                  </header>
+                  <div class="z-10 sm:col-span-6">
+                    <h3 class="font-medium leading-snug text-gray-900">
+                      <a class="exp-title inline-flex items-baseline font-semibold leading-tight text-gray-900 hover:text-mint-600 focus-visible:text-mint-600 group/link text-base" href="#" target="_blank" rel="noreferrer noopener">
+                        <span>社群創辦人 · LINE 社群</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 ml-1 text-mint-500">
+                          <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <p class="mt-2 text-sm leading-normal text-gray-500">
+                      創立並經營活躍的 LINE 社群，設計會員分級制度、積分系統與自動化流程。
+                      規劃線上線下活動，從發想到執行，打造具黏著度的社群生態。
+                    </p>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">社群經營</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">系統設計</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">活動企劃</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              
+              <!-- 經歷 2 -->
+              <li class="mb-12">
+                <div class="exp-card group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 p-4 -mx-4">
+                  <header class="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-mint-600 sm:col-span-2">
+                    2023 — 2024
+                  </header>
+                  <div class="z-10 sm:col-span-6">
+                    <h3 class="font-medium leading-snug text-gray-900">
+                      <span class="exp-title font-semibold">前端開發實習 · 新創公司</span>
+                    </h3>
+                    <p class="mt-2 text-sm leading-normal text-gray-500">
+                      參與公司產品的前端開發，使用 Vue.js 與 Tailwind CSS 建構響應式介面。
+                      與設計師密切合作，將 Figma 設計稿轉化為高品質的網頁介面。
+                    </p>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Vue.js</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Tailwind CSS</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Figma</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              
+              <!-- 經歷 3 -->
+              <li class="mb-12">
+                <div class="exp-card group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 p-4 -mx-4">
+                  <header class="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-mint-600 sm:col-span-2">
+                    2022 — 2023
+                  </header>
+                  <div class="z-10 sm:col-span-6">
+                    <h3 class="font-medium leading-snug text-gray-900">
+                      <span class="exp-title font-semibold">AIoT 專案研究 · 大學專題</span>
+                    </h3>
+                    <p class="mt-2 text-sm leading-normal text-gray-500">
+                      開發智慧植栽監測系統，結合 Jetson Nano 與各類感測器，
+                      建立即時數據監控平台，實現自動化灌溉與環境控制。
+                    </p>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Jetson Nano</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Python</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">IoT Sensors</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Flask</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              
+            </ol>
+            
+            <div class="mt-12">
+              <a class="link-hover inline-flex items-center leading-tight group" href="/resume.pdf" target="_blank" rel="noreferrer noopener">
+                <span>查看完整履歷</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="ml-1 inline-block h-4 w-4 shrink-0 transition-transform group-hover:translate-x-2">
+                  <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 作品集 -->
+        <section id="projects" class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24 section-fade" aria-label="作品集">
+          <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-mint-50/90 px-6 py-5 backdrop-blur-md md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-mint-700 lg:sr-only">作品集</h2>
+          </div>
+          <div>
+            <ul class="group/list">
+              
+              <!-- 專案 1 -->
+              <li class="mb-12">
+                <div class="project-card group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 p-4 -mx-4">
+                  <div class="z-10 sm:order-2 sm:col-span-6">
+                    <h3>
+                      <a class="project-title inline-flex items-baseline font-semibold leading-tight text-gray-900 hover:text-mint-600 focus-visible:text-mint-600 group/link text-base" href="https://github.com" target="_blank" rel="noreferrer noopener">
+                        <span>智慧植栽監測系統</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="project-arrow inline-block h-4 w-4 shrink-0 transition-transform ml-1 text-mint-500">
+                          <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <p class="mt-2 text-sm leading-normal text-gray-500">
+                      結合 Jetson Nano 與多種感測器，打造即時監控植物生長環境的 AIoT 系統。
+                      支援溫濕度、光照、土壤濕度監測，並提供自動化灌溉功能。
+                    </p>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Vue.js</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Jetson Nano</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Flask</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">IoT</span></li>
+                    </ul>
+                  </div>
+                  <div class="project-image z-10 sm:order-1 sm:col-span-2 sm:translate-y-1 transition-all duration-300">
+                    <div class="rounded-xl overflow-hidden border-2 border-mint-200 bg-gradient-to-br from-mint-100 to-mint-200 shadow-md">
+                      <div class="aspect-video flex items-center justify-center">
+                        <span class="text-4xl">🌱</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              
+              <!-- 專案 2 -->
+              <li class="mb-12">
+                <div class="project-card group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 p-4 -mx-4">
+                  <div class="z-10 sm:order-2 sm:col-span-6">
+                    <h3>
+                      <a class="project-title inline-flex items-baseline font-semibold leading-tight text-gray-900 hover:text-mint-600 focus-visible:text-mint-600 group/link text-base" href="https://github.com" target="_blank" rel="noreferrer noopener">
+                        <span>LINE 社群管理平台</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="project-arrow inline-block h-4 w-4 shrink-0 transition-transform ml-1 text-mint-500">
+                          <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <p class="mt-2 text-sm leading-normal text-gray-500">
+                      為 LINE 社群打造的全方位管理平台，整合會員管理、積分系統、
+                      活動報名與自動回覆機器人，大幅提升社群經營效率。
+                    </p>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Vue.js</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Flask</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">LINE API</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">WebSocket</span></li>
+                    </ul>
+                  </div>
+                  <div class="project-image z-10 sm:order-1 sm:col-span-2 sm:translate-y-1 transition-all duration-300">
+                    <div class="rounded-xl overflow-hidden border-2 border-green-200 bg-gradient-to-br from-green-100 to-emerald-200 shadow-md">
+                      <div class="aspect-video flex items-center justify-center">
+                        <span class="text-4xl">💬</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              
+              <!-- 專案 3 -->
+              <li class="mb-12">
+                <div class="project-card group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 p-4 -mx-4">
+                  <div class="z-10 sm:order-2 sm:col-span-6">
+                    <h3>
+                      <a class="project-title inline-flex items-baseline font-semibold leading-tight text-gray-900 hover:text-mint-600 focus-visible:text-mint-600 group/link text-base" href="https://github.com" target="_blank" rel="noreferrer noopener">
+                        <span>個人作品集網站</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="project-arrow inline-block h-4 w-4 shrink-0 transition-transform ml-1 text-mint-500">
+                          <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd"/>
+                        </svg>
+                      </a>
+                    </h3>
+                    <p class="mt-2 text-sm leading-normal text-gray-500">
+                      使用 Tailwind CSS 打造的現代化個人網站，採用響應式設計，
+                      支援 PWA 離線存取，展示個人作品與技術文章。
+                    </p>
+                    <ul class="mt-3 flex flex-wrap gap-2">
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">HTML</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Tailwind CSS</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">PWA</span></li>
+                      <li><span class="tag flex items-center rounded-full px-3 py-1 text-xs">Vercel</span></li>
+                    </ul>
+                  </div>
+                  <div class="project-image z-10 sm:order-1 sm:col-span-2 sm:translate-y-1 transition-all duration-300">
+                    <div class="rounded-xl overflow-hidden border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-100 shadow-md">
+                      <div class="aspect-video flex items-center justify-center">
+                        <span class="text-4xl">🎨</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              
+            </ul>
+            
+            <div class="mt-12">
+              <a class="link-hover inline-flex items-center leading-tight group" href="projects.html">
+                <span>查看完整作品集</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="ml-1 inline-block h-4 w-4 shrink-0 transition-transform group-hover:translate-x-2">
+                  <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="max-w-md pb-16 text-sm text-gray-500 sm:pb-0">
+          <p>
+            使用 <a href="https://code.visualstudio.com/" class="font-medium text-mint-600 hover:text-mint-500 hover:underline" target="_blank" rel="noreferrer noopener">Visual Studio Code</a> 編寫，
+            以 <a href="https://tailwindcss.com/" class="font-medium text-mint-600 hover:text-mint-500 hover:underline" target="_blank" rel="noreferrer noopener">Tailwind CSS</a> 打造，
+            部署於 <a href="https://vercel.com/" class="font-medium text-mint-600 hover:text-mint-500 hover:underline" target="_blank" rel="noreferrer noopener">Vercel</a>。
+          </p>
+          <p class="mt-4">© 2026 Ana Chen. 以 💚 打造</p>
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // 滑鼠追蹤光暈效果
+    document.addEventListener('mousemove', (e) => {
+      document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+      document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+    });
+
+    // 導航高亮當前區塊
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observerOptions = {
+      rootMargin: '-50% 0px -50% 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + entry.target.id) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+    // 區塊淡入動畫
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.section-fade').forEach(el => {
+      fadeObserver.observe(el);
+    });
+
+    // 平滑滾動
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
