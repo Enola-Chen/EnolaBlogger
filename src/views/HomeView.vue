@@ -295,7 +295,7 @@ const experiences = [
       '撰寫試香互動專題的開發手札：從發想、介面與使用者流程，到以 Vue.js 與 Tailwind CSS 實作可探索的試香體驗；以長文整理技術選型與心得，性質接近部落格的專題紀錄。',
     tags: ['Vue.js', 'Tailwind CSS', '專題筆記'],
     fullCardHref: fragranceIntroduceHref,
-    thumbImg: '../images/Fragrance/sample.png',
+    thumbImg: '/images/Fragrance/sample.png',
     thumbCard:
       'rounded-xl overflow-hidden border-2 border-rose-200 bg-gradient-to-br from-rose-100 to-fuchsia-100 shadow-md',
   },
@@ -306,7 +306,7 @@ const experiences = [
       '開發智慧植栽監測系統，結合 Jetson Nano 與各類感測器，建立即時數據監控平台，實現自動化灌溉與環境控制。',
     tags: ['Jetson Nano', 'Python', 'IoT Sensors', 'Flask'],
     fullCardHref: plantRobotHref,
-    thumbImg: '../images/plant/hardware.png',
+    thumbImg: '/images/plant/hardware.png',
     thumbCard:
       'rounded-xl overflow-hidden border-2 border-mint-200 bg-gradient-to-br from-mint-100 to-mint-200 shadow-md',
   },
