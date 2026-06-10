@@ -13,13 +13,8 @@
       </div>
       <div class="text-gray-600">
         <p class="mb-4">
-          嗨！我是 Ana，一個熱愛技術與設計的 19 歲<span class="text-highlight">資訊工程系學生</span>。
-          我專注於打造<span class="text-highlight">美觀、直覺且易用</span>的網頁體驗，
-          同時也在探索 AI 與 IoT 結合的無限可能。
-        </p>
-        <p class="mb-4">
-          我的主要專長是<span class="text-highlight">前端開發</span>，熟悉 Vue.js、Tailwind CSS 等現代框架。
-          同時，我也有豐富的<span class="text-highlight"> AIoT 專案經驗</span>，
+          我的主要專長是<span class="text-highlight">JavaScript開發</span>，熟悉 Vue.js、Tailwind CSS 等現代框架。
+          同時，我也有<span class="text-highlight"> AIoT 專案經驗</span>，
           曾使用 Jetson Nano 開發智慧監測系統，將感測器數據視覺化呈現。
         </p>
         <p class="mb-4">
@@ -228,39 +223,6 @@
       </div>
     </section>
 
-    <footer class="max-w-md pb-16 text-sm text-gray-500 sm:pb-0">
-      <p>
-        使用
-        <a
-          href="https://code.visualstudio.com/"
-          class="font-medium text-mint-600 hover:text-mint-500 hover:underline"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Visual Studio Code
-        </a>
-        編寫，以
-        <a
-          href="https://tailwindcss.com/"
-          class="font-medium text-mint-600 hover:text-mint-500 hover:underline"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Tailwind CSS
-        </a>
-        打造，部署於
-        <a
-          href="https://vercel.com/"
-          class="font-medium text-mint-600 hover:text-mint-500 hover:underline"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Vercel
-        </a>
-        。
-      </p>
-      <p class="mt-4">© 2026 Ana Chen. 以 💚 打造</p>
-    </footer>
   </div>
 </template>
 
@@ -276,18 +238,6 @@ const fragranceIntroduceHref = resolveStaticProjectHref('fragranceIntroduce.html
 const plantRobotHref = resolveStaticProjectHref('plant-robot.html');
 
 const experiences = [
-  {
-    date: '2024 — 現在',
-    title: '社群創辦人 · LINE 社群',
-    description:
-      '創立並經營活躍的 LINE 社群，設計會員分級制度、積分系統與自動化流程。規劃線上線下活動，從發想到執行，打造具黏著度的社群生態。',
-    tags: ['社群經營', '系統設計', '活動企劃'],
-    fullCardHref: null,
-    titleHref: '#',
-    thumbImg: '',
-    thumbCard:
-      'rounded-xl overflow-hidden border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-emerald-100 shadow-md',
-  },
   {
     date: '2023 — 2024',
     title: '試香系統開發手札',

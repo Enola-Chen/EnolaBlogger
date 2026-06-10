@@ -21,6 +21,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+        'serif-zh': ['"Noto Serif TC"', 'serif'],
       },
     },
   },

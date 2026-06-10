@@ -14,15 +14,12 @@
         >
           <div>
             <div>
-              <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                <RouterLink to="/" class="transition-colors hover:text-mint-600">Ana Chen</RouterLink>
+              <h1 class="font-serif-zh text-4xl font-semibold tracking-[0.12em] text-mint-600 sm:text-5xl">
+                <RouterLink to="/" class="transition-colors hover:text-mint-400">陳鈺晴</RouterLink>
               </h1>
               <h2 class="mt-3 text-lg font-medium tracking-tight text-mint-600 sm:text-xl">
-                前端工程師 & AIoT 探索者
+                JS工程師 & AIoT 探索家
               </h2>
-              <p class="mt-4 max-w-xs leading-normal text-gray-500">
-                19 歲資工系學生，熱愛創造美觀且實用的網頁體驗，探索 AI 與 IoT 交織的未來科技世界。
-              </p>
             </div>
 
             <nav class="nav mt-16 hidden lg:block" aria-label="頁面內導航">
